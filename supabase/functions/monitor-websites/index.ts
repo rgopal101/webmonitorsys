@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
     };
 
     // Only log and email on actual status change
-    const statusChanged = previousStatus !== status && previousStatus !== "unknown";
+    const statusChanged = previousStatus !== status;
     
     if (statusChanged) {
       updateData.last_notified_status = status;
