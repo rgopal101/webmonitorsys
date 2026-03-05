@@ -42,7 +42,7 @@ export default function AdminLayout() {
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/15">
             <Activity className="h-5 w-5 text-sidebar-primary" />
           </div>
-          <span className="text-lg font-bold text-sidebar-accent-foreground">UptimeGuard</span>
+          <span className="text-lg font-bold text-sidebar-accent-foreground">WMS</span>
           <button className="ml-auto lg:hidden" onClick={() => setSidebarOpen(false)}>
             <X className="h-5 w-5 text-sidebar-foreground" />
           </button>
