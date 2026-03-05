@@ -123,6 +123,8 @@ export default function ActivityLogsPage() {
             <SelectItem value="all">All Events</SelectItem>
             <SelectItem value="outage">🔴 Outage</SelectItem>
             <SelectItem value="recovery">🟢 Recovery</SelectItem>
+            <SelectItem value="online">🟢 Online</SelectItem>
+            <SelectItem value="offline">🔴 Offline</SelectItem>
           </SelectContent>
         </Select>
 
