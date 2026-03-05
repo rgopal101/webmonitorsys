@@ -1,0 +1,1 @@
+ALTER TABLE public.websites ADD COLUMN last_notified_status text DEFAULT 'unknown';

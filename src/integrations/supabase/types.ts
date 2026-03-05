@@ -132,6 +132,7 @@ export type Database = {
           created_at: string
           id: string
           last_checked_at: string | null
+          last_notified_status: string | null
           name: string
           owner_email: string
           response_time_ms: number | null
@@ -144,6 +145,7 @@ export type Database = {
           created_at?: string
           id?: string
           last_checked_at?: string | null
+          last_notified_status?: string | null
           name: string
           owner_email: string
           response_time_ms?: number | null
@@ -156,6 +158,7 @@ export type Database = {
           created_at?: string
           id?: string
           last_checked_at?: string | null
+          last_notified_status?: string | null
           name?: string
           owner_email?: string
           response_time_ms?: number | null
