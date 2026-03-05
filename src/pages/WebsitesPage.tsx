@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2, Play, Pause } from "lucide-react";
+import { Plus, Pencil, Trash2, Play, Pause, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -66,6 +66,26 @@ export default function WebsitesPage() {
     onError: (e) => toast.error(e.message),
   });
 
+  const checkAll = useMutation({
+    mutationFn: async () => {
+      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+      const res = await fetch(`https://${projectId}.supabase.co/functions/v1/monitor-websites`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        },
+      });
+      if (!res.ok) throw new Error("Check failed");
+      return res.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["websites"] });
+      toast.success(`Checked ${data.checked} website(s)`);
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
@@ -73,10 +93,15 @@ export default function WebsitesPage() {
           <h1 className="text-2xl font-bold text-foreground">Websites</h1>
           <p className="text-sm text-muted-foreground">Manage monitored websites</p>
         </div>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button><Plus className="mr-2 h-4 w-4" />Add Website</Button>
-          </DialogTrigger>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => checkAll.mutate()} disabled={checkAll.isPending}>
+            <RefreshCw className={cn("mr-2 h-4 w-4", checkAll.isPending && "animate-spin")} />
+            {checkAll.isPending ? "Checking..." : "Check All Now"}
+          </Button>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button><Plus className="mr-2 h-4 w-4" />Add Website</Button>
+            </DialogTrigger>
           <DialogContent className="bg-card border-border">
             <DialogHeader>
               <DialogTitle className="text-foreground">Add Website</DialogTitle>
@@ -123,6 +148,7 @@ export default function WebsitesPage() {
             </form>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       <div className="rounded-xl border border-border bg-card overflow-x-auto">
