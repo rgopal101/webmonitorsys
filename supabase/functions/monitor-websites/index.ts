@@ -47,9 +47,11 @@ async function sendAlert(smtpSettings: any, site: any, status: string) {
     </div>
   `;
 
+  const recipients = site.owner_email.split(",").map((e: string) => e.trim()).filter(Boolean);
+  
   await transporter.sendMail({
     from: `"Website Monitor" <${smtpSettings.email}>`,
-    to: site.owner_email,
+    to: recipients,
     subject,
     html,
   });
