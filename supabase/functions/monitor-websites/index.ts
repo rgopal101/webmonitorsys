@@ -120,25 +120,15 @@ Deno.serve(async (req) => {
       last_checked_at: now,
     };
 
-    // Log every check
-    const checkMessage = `${site.name} (${site.url}) is ${status}. ${
-      responseTimeMs ? `Response time: ${responseTimeMs}ms` : "No response"
-    }`;
-    await supabase.from("activity_logs").insert({
-      event_type: status === "online" ? "online" : "offline",
-      message: checkMessage,
-      website_id: site.id,
-    });
-
-    // Only send email on actual status change
+    // Only log and email on actual status change
     const statusChanged = previousStatus !== status && previousStatus !== "unknown";
     
     if (statusChanged) {
       updateData.last_notified_status = status;
 
-      // Also log the change event
+      const eventType = status === "online" ? "recovery" : "outage";
       await supabase.from("activity_logs").insert({
-        event_type: status === "online" ? "recovery" : "outage",
+        event_type: eventType,
         message: `${site.name} (${site.url}) went ${status}. ${
           responseTimeMs ? `Response time: ${responseTimeMs}ms` : "No response"
         }`,
