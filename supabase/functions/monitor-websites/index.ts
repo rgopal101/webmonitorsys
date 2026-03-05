@@ -111,20 +111,21 @@ Deno.serve(async (req) => {
       responseTimeMs = null;
     }
 
-    const previousStatus = site.status;
+    const previousStatus = site.last_notified_status ?? site.status;
     const now = new Date().toISOString();
 
-    await supabase
-      .from("websites")
-      .update({
-        status,
-        response_time_ms: responseTimeMs,
-        last_checked_at: now,
-      })
-      .eq("id", site.id);
+    const updateData: Record<string, unknown> = {
+      status,
+      response_time_ms: responseTimeMs,
+      last_checked_at: now,
+    };
 
-    // Log and send email on status change
-    if (previousStatus !== status && previousStatus !== "unknown") {
+    // Only log and email on actual status change from last notified
+    const statusChanged = previousStatus !== status && previousStatus !== "unknown";
+    
+    if (statusChanged) {
+      updateData.last_notified_status = status;
+
       const eventType = status === "online" ? "recovery" : "outage";
       const message = `${site.name} (${site.url}) went ${status}. ${
         responseTimeMs ? `Response time: ${responseTimeMs}ms` : "No response"
@@ -143,6 +144,11 @@ Deno.serve(async (req) => {
         console.error(`Failed to send email for ${site.name}:`, emailErr);
       }
     }
+
+    await supabase
+      .from("websites")
+      .update(updateData)
+      .eq("id", site.id);
 
     results.push({
       id: site.id,
