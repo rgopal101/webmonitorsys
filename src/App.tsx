@@ -13,6 +13,7 @@ import WebsitesPage from "@/pages/WebsitesPage";
 import ActivityLogsPage from "@/pages/ActivityLogsPage";
 import SmtpSettingsPage from "@/pages/SmtpSettingsPage";
 import NotFound from "@/pages/NotFound";
+import LandingPage from "@/pages/LandingPage";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route
               element={
@@ -32,7 +34,7 @@ const App = () => (
                 </ProtectedRoute>
               }
             >
-              <Route path="/" element={<DashboardPage />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/users" element={<UsersPage />} />
               <Route path="/websites" element={<WebsitesPage />} />
               <Route path="/activity-logs" element={<ActivityLogsPage />} />
