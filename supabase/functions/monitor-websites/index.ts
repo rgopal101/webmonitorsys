@@ -10,14 +10,19 @@ const corsHeaders = {
 async function sendAlert(smtpSettings: any, site: any, status: string) {
   if (!smtpSettings) return;
 
+  const isSSL = smtpSettings.encryption === "ssl" || smtpSettings.port === 465;
+  
   const transporter = nodemailer.createTransport({
     host: smtpSettings.host,
     port: smtpSettings.port,
-    secure: smtpSettings.encryption === "ssl",
+    secure: isSSL,
     auth: {
       user: smtpSettings.email,
       pass: smtpSettings.password,
     },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
   });
 
   const isDown = status === "offline";
