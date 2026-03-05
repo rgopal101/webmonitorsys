@@ -82,8 +82,10 @@ export default function ActivityLogsPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Events</SelectItem>
-              <SelectItem value="outage">🔴 Outage</SelectItem>
-              <SelectItem value="recovery">🟢 Recovery</SelectItem>
+              <SelectItem value="online">🟢 Online Check</SelectItem>
+              <SelectItem value="offline">🔴 Offline Check</SelectItem>
+              <SelectItem value="outage">⚠️ Outage (status change)</SelectItem>
+              <SelectItem value="recovery">✅ Recovery (status change)</SelectItem>
             </SelectContent>
           </Select>
         </div>
