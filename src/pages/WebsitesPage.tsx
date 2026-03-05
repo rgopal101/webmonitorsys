@@ -192,7 +192,7 @@ export default function WebsitesPage() {
           <p className="text-sm text-muted-foreground">Manage monitored websites</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => checkAll.mutate()} disabled={checkAll.isPending}>
+          <Button variant="outline" onClick={() => checkAll.mutate()} disabled={checkAll.isPending} className="border-border text-foreground hover:bg-muted">
             <RefreshCw className={cn("mr-2 h-4 w-4", checkAll.isPending && "animate-spin")} />
             {checkAll.isPending ? "Checking..." : "Check All Now"}
           </Button>
