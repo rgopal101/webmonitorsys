@@ -110,9 +110,9 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
               <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;line-height:1.6;">You are receiving this alert because your website is being monitored.</p>
               <table role="presentation" cellpadding="0" cellspacing="0" style="margin:14px auto 0;">
                 <tr>
-                  <td style="padding:0 8px;"><a href="mailto:info@nextzensoftech.com" style="color:#2563eb;font-size:12px;text-decoration:none;">info@nextzensoftech.com</a></td>
+                  <td style="padding:0 8px;"><a href="mailto:info@isitonlineornot.com" style="color:#2563eb;font-size:12px;text-decoration:none;">info@isitonlineornot.com</a></td>
                   <td style="color:#cbd5e1;font-size:12px;">|</td>
-                  <td style="padding:0 8px;"><a href="https://nextzensoftech.com/" style="color:#2563eb;font-size:12px;text-decoration:none;">nextzensoftech.com</a></td>
+                  <td style="padding:0 8px;"><a href="https://isitonlineornot.com/" style="color:#2563eb;font-size:12px;text-decoration:none;">isitonlineornot.com</a></td>
                 </tr>
               </table>
               <p style="margin:16px 0 0;color:#cbd5e1;font-size:11px;">&copy; ${new Date().getFullYear()} Isitonlineornot. All rights reserved.</p>

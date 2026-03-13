@@ -181,7 +181,7 @@ Deno.serve(async (req) => {
         });
 
         await transporter.sendMail({
-          from: `"Nextzen Softech Monitor" <${smtpSettings.email}>`,
+          from: `"Isitonlineornot" <${smtpSettings.email}>`,
           to: email,
           subject: `⏰ Subscription expiring in ${daysLeft} day${daysLeft > 1 ? "s" : ""} — Renew now`,
           html,
