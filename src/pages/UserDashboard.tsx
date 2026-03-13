@@ -157,10 +157,12 @@ export default function UserDashboard() {
             </div>
             <span className="text-lg font-bold tracking-tight">isitonlineornot<span className="text-primary">.com</span></span>
           </Link>
+          <div className="hidden items-center gap-6 text-sm md:flex">
+            <Link to="/" className="text-muted-foreground transition hover:text-foreground">Home</Link>
+            <Link to="/pricing" className="text-muted-foreground transition hover:text-foreground">Pricing</Link>
+          </div>
           <div className="flex items-center gap-3">
-            <Link to="/account/billing">
-              <Button size="sm" variant="ghost"><Crown className="mr-1 h-4 w-4" /> {subscription?.plan ?? "free"}</Button>
-            </Link>
+            <Link to="/my-dashboard"><Button size="sm">Dashboard</Button></Link>
             <Button size="sm" variant="ghost" onClick={handleSignOut}>
               <LogOut className="mr-1 h-4 w-4" /> Sign Out
             </Button>

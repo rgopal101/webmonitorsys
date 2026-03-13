@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 type CheckResult = {
   status: "online" | "offline" | "slow" | null;
@@ -71,6 +72,7 @@ const faqs = [
 ];
 
 export default function LandingPage() {
+  const { session } = useAuth();
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CheckResult>(null);
@@ -109,14 +111,18 @@ export default function LandingPage() {
             <span className="text-lg font-bold tracking-tight">isitonlineornot<span className="text-primary">.com</span></span>
           </div>
           <div className="hidden items-center gap-6 text-sm md:flex">
-            <a href="#features" className="text-muted-foreground transition hover:text-foreground">Features</a>
-            <a href="#how-it-works" className="text-muted-foreground transition hover:text-foreground">How It Works</a>
+            <Link to="/" className="text-foreground font-medium">Home</Link>
             <Link to="/pricing" className="text-muted-foreground transition hover:text-foreground">Pricing</Link>
-            <a href="#faq" className="text-muted-foreground transition hover:text-foreground">FAQ</a>
           </div>
           <div className="flex items-center gap-2">
-            <Link to="/login"><Button size="sm" variant="ghost">Login</Button></Link>
-            <Link to="/signup"><Button size="sm">Sign Up Free</Button></Link>
+            {session ? (
+              <Link to="/my-dashboard"><Button size="sm">Dashboard</Button></Link>
+            ) : (
+              <>
+                <Link to="/login"><Button size="sm" variant="ghost">Login</Button></Link>
+                <Link to="/signup"><Button size="sm">Sign Up Free</Button></Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
