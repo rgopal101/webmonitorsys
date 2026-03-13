@@ -148,27 +148,7 @@ export default function UserDashboard() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Top Nav */}
-      <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Globe className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-bold tracking-tight">isitonlineornot<span className="text-primary">.com</span></span>
-          </Link>
-          <div className="hidden items-center gap-6 text-sm md:flex">
-            <Link to="/" className="text-muted-foreground transition hover:text-foreground">Home</Link>
-            <Link to="/pricing" className="text-muted-foreground transition hover:text-foreground">Pricing</Link>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link to="/my-dashboard"><Button size="sm">Dashboard</Button></Link>
-            <Button size="sm" variant="ghost" onClick={handleSignOut}>
-              <LogOut className="mr-1 h-4 w-4" /> Sign Out
-            </Button>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Stats */}

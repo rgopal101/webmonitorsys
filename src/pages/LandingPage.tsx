@@ -101,31 +101,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Globe className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-bold tracking-tight">isitonlineornot<span className="text-primary">.com</span></span>
-          </div>
-          <div className="hidden items-center gap-6 text-sm md:flex">
-            <Link to="/" className="text-foreground font-medium">Home</Link>
-            <Link to="/pricing" className="text-muted-foreground transition hover:text-foreground">Pricing</Link>
-          </div>
-          <div className="flex items-center gap-2">
-            {session ? (
-              <Link to="/my-dashboard"><Button size="sm">Dashboard</Button></Link>
-            ) : (
-              <>
-                <Link to="/login"><Button size="sm" variant="ghost">Login</Button></Link>
-                <Link to="/signup"><Button size="sm">Sign Up Free</Button></Link>
-              </>
-            )}
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero */}
       <section className="relative overflow-hidden pb-20 pt-20 md:pt-32">
