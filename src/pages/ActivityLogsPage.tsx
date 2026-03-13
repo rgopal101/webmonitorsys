@@ -35,6 +35,7 @@ export default function ActivityLogsPage() {
 
   const { data: websites } = useQuery({
     queryKey: ["websites-list-filter"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data, error } = await supabase.from("websites").select("id, name, status").order("name");
       if (error) throw error;
