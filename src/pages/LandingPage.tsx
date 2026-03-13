@@ -322,18 +322,17 @@ export default function LandingPage() {
             <div>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Product</h4>
               <ul className="space-y-2.5 text-sm">
-                <li><a href="#" className="text-muted-foreground transition hover:text-foreground">Website Status Checker</a></li>
-                <li><a href="#monitoring" className="text-muted-foreground transition hover:text-foreground">Website Monitoring</a></li>
-                <li><a href="#features" className="text-muted-foreground transition hover:text-foreground">Features</a></li>
-                <li><a href="#faq" className="text-muted-foreground transition hover:text-foreground">FAQ</a></li>
+                <li><Link to="/why-use" className="text-muted-foreground transition hover:text-foreground">Why Use</Link></li>
+                <li><Link to="/how-it-works" className="text-muted-foreground transition hover:text-foreground">How It Works</Link></li>
+                <li><Link to="/faq" className="text-muted-foreground transition hover:text-foreground">FAQ</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Legal</h4>
               <ul className="space-y-2.5 text-sm">
-                <li><a href="#" className="text-muted-foreground transition hover:text-foreground">Privacy Policy</a></li>
-                <li><a href="#" className="text-muted-foreground transition hover:text-foreground">Terms of Service</a></li>
-                <li><a href="#" className="text-muted-foreground transition hover:text-foreground">Contact</a></li>
+                <li><Link to="/privacy-policy" className="text-muted-foreground transition hover:text-foreground">Privacy Policy</Link></li>
+                <li><Link to="/terms-of-service" className="text-muted-foreground transition hover:text-foreground">Terms of Service</Link></li>
+                <li><Link to="/contact" className="text-muted-foreground transition hover:text-foreground">Contact</Link></li>
               </ul>
             </div>
           </div>
