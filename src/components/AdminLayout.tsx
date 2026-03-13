@@ -12,6 +12,7 @@ const navItems = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/users", icon: Users, label: "Users" },
   { to: "/websites", icon: Globe, label: "Websites" },
+  { to: "/subscriptions", icon: ScrollText, label: "Subscriptions" },
   { to: "/activity-logs", icon: ScrollText, label: "Activity Logs" },
   { to: "/settings", icon: Settings, label: "SMTP Settings" },
 ];
