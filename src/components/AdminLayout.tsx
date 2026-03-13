@@ -23,7 +23,7 @@ const navItems = [
 ];
 
 export default function AdminLayout() {
-  const { user, userRole, signOut } = useAuth();
+  const { user, userRole, userName, signOut } = useAuth();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
