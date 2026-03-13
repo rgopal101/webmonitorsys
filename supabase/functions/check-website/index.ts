@@ -56,7 +56,17 @@ serve(async (req) => {
 
       if (!response.ok) {
         status = "offline";
-        lastError = `HTTP ${response.status} ${response.statusText}`;
+        // Detect Cloudflare WAF block
+        if (response.status === 403) {
+          const body = await response.text();
+          if (body.includes("cloudflare") || body.includes("Cloudflare") || body.includes("cf-")) {
+            lastError = "Blocked by Cloudflare WAF — site owner must whitelist monitoring IPs";
+          } else {
+            lastError = `HTTP 403 Forbidden`;
+          }
+        } else {
+          lastError = `HTTP ${response.status} ${response.statusText}`;
+        }
       } else if (responseTime > 3000) {
         status = "slow";
       }

@@ -257,7 +257,16 @@ Deno.serve(async (req) => {
         lastError = null;
       } else {
         status = "offline";
-        lastError = `HTTP ${res.status} ${res.statusText}`;
+        if (res.status === 403) {
+          const body = await res.text();
+          if (body.includes("cloudflare") || body.includes("Cloudflare") || body.includes("cf-")) {
+            lastError = "Blocked by Cloudflare WAF — site owner must whitelist monitoring IPs";
+          } else {
+            lastError = `HTTP 403 Forbidden`;
+          }
+        } else {
+          lastError = `HTTP ${res.status} ${res.statusText}`;
+        }
       }
     } catch (err: unknown) {
       status = "offline";
