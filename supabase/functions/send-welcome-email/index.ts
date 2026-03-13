@@ -7,8 +7,9 @@ const corsHeaders = {
 };
 
 const LOGO_URL = "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
+const APP_URL = "https://webmonitorsys.lovable.app";
 
-function buildWelcomeEmail(opts: { name: string; email: string; logoUrl: string; loginUrl: string }) {
+function buildVerificationEmail(opts: { name: string; email: string; verifyUrl: string; logoUrl: string }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
@@ -20,21 +21,21 @@ function buildWelcomeEmail(opts: { name: string; email: string; logoUrl: string;
         <!-- Header -->
         <tr><td style="background:#fff;padding:28px 32px 20px;text-align:center;border-bottom:1px solid #e8edf2;">
           <img src="${opts.logoUrl}" alt="Nextzen Softech" height="50" style="height:50px;width:auto;" />
-          <p style="margin:10px 0 0;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">Account Confirmation</p>
+          <p style="margin:10px 0 0;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">Email Verification</p>
         </td></tr>
 
         <!-- Hero -->
         <tr><td style="background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);padding:32px;text-align:center;">
-          <span style="font-size:44px;">🎉</span>
-          <h1 style="margin:12px 0 0;color:#fff;font-size:24px;font-weight:800;">Welcome Aboard!</h1>
-          <p style="margin:8px 0 0;color:rgba(255,255,255,0.92);font-size:15px;">Your account has been created successfully.</p>
+          <span style="font-size:44px;">✉️</span>
+          <h1 style="margin:12px 0 0;color:#fff;font-size:24px;font-weight:800;">Verify Your Email</h1>
+          <p style="margin:8px 0 0;color:rgba(255,255,255,0.92);font-size:15px;">One click to activate your account</p>
         </td></tr>
 
         <!-- Body -->
         <tr><td style="background:#fff;padding:32px;">
           <p style="margin:0 0 16px;color:#0f172a;font-size:16px;">Hi <strong>${opts.name}</strong>,</p>
           <p style="margin:0 0 16px;color:#334155;font-size:15px;line-height:1.6;">
-            Thank you for signing up with <strong>Nextzen Softech Monitoring System</strong>. Your account is now active and ready to use.
+            Thank you for signing up with <strong>Nextzen Softech Monitoring System</strong>. Please click the button below to verify your email address and activate your account.
           </p>
 
           <table role="presentation" width="100%" style="background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;margin:0 0 24px;">
@@ -42,23 +43,20 @@ function buildWelcomeEmail(opts: { name: string; email: string; logoUrl: string;
               <span style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;">Account Email</span>
               <p style="margin:6px 0 0;color:#0f172a;font-size:16px;font-weight:600;">${opts.email}</p>
             </td></tr>
-            <tr><td style="padding:16px 20px;border-bottom:1px solid #e2e8f0;">
+            <tr><td style="padding:16px 20px;">
               <span style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;">Plan</span>
               <p style="margin:6px 0 0;color:#0f172a;font-size:16px;font-weight:600;">Free Trial (15 Days)</p>
-            </td></tr>
-            <tr><td style="padding:16px 20px;">
-              <span style="color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;">Includes</span>
-              <p style="margin:6px 0 0;color:#0f172a;font-size:16px;font-weight:600;">1 Domain • 1 Notification Email</p>
             </td></tr>
           </table>
 
           <table role="presentation" width="100%">
             <tr><td align="center">
-              <a href="${opts.loginUrl}" style="display:inline-block;background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);color:#fff;padding:14px 36px;border-radius:10px;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,0.15);">Go to Dashboard &rarr;</a>
+              <a href="${opts.verifyUrl}" style="display:inline-block;background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);color:#fff;padding:14px 36px;border-radius:10px;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,0.15);">Verify Email &amp; Activate Account &rarr;</a>
             </td></tr>
           </table>
 
-          <p style="margin:20px 0 0;color:#94a3b8;font-size:12px;text-align:center;">If you did not create this account, please ignore this email.</p>
+          <p style="margin:20px 0 0;color:#94a3b8;font-size:12px;text-align:center;">This link will expire in 24 hours. If you did not create this account, please ignore this email.</p>
+          <p style="margin:12px 0 0;color:#94a3b8;font-size:11px;text-align:center;word-break:break-all;">If the button doesn't work, copy and paste this link:<br/><a href="${opts.verifyUrl}" style="color:#2563eb;">${opts.verifyUrl}</a></p>
         </td></tr>
 
         <!-- Footer -->
@@ -93,6 +91,33 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
+    // Generate email verification link using Supabase Admin API
+    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+      type: "signup",
+      email,
+      options: {
+        redirectTo: `${APP_URL}/login?verified=true`,
+      },
+    });
+
+    if (linkError || !linkData) {
+      console.error("Generate link error:", linkError);
+      return new Response(JSON.stringify({ error: "Failed to generate verification link" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // The generated link contains the token - extract and build the confirmation URL
+    const verifyUrl = linkData.properties?.action_link;
+
+    if (!verifyUrl) {
+      return new Response(JSON.stringify({ error: "No verification link generated" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Fetch SMTP settings from database
     const { data: smtpSettings, error: smtpError } = await supabase
       .from("smtp_settings")
@@ -117,19 +142,17 @@ Deno.serve(async (req) => {
       socketTimeout: 15000,
     });
 
-    const appUrl = "https://webmonitorsys.lovable.app";
-
-    const html = buildWelcomeEmail({
+    const html = buildVerificationEmail({
       name: fullName || email,
       email,
+      verifyUrl,
       logoUrl: LOGO_URL,
-      loginUrl: `${appUrl}/login`,
     });
 
     await transporter.sendMail({
       from: `"Nextzen Softech Monitor" <${smtpSettings.email}>`,
       to: email,
-      subject: "🎉 Welcome to Nextzen Softech Monitoring — Account Confirmed!",
+      subject: "✉️ Verify your email — Nextzen Softech Monitoring",
       html,
     });
 
@@ -138,6 +161,7 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
+    console.error("Send welcome email error:", e);
     return new Response(JSON.stringify({ error: e.message }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
