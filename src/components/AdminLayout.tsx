@@ -49,8 +49,7 @@ export default function AdminLayout() {
         mobileOpen ? "translate-x-0 w-64" : "-translate-x-full lg:translate-x-0"
       )}>
         <div className="flex h-16 items-center gap-3 px-4 border-b border-sidebar-border">
-          <img src={logoUrl} alt={logoAlt} className="h-9 w-9 shrink-0 rounded-lg object-contain" />
-          {!collapsed && <span className="text-lg font-bold text-sidebar-accent-foreground">WMS</span>}
+          <img src={logoUrl} alt={logoAlt} className={cn("shrink-0 object-contain", collapsed ? "h-9 w-9" : "h-10 max-w-[160px]")} />
           <button className="ml-auto lg:hidden" onClick={() => setMobileOpen(false)}>
             <X className="h-5 w-5 text-sidebar-foreground" />
           </button>
