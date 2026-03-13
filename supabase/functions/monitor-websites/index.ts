@@ -39,7 +39,7 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
           <!-- LOGO HEADER (white background) -->
           <tr>
             <td style="background:#ffffff;padding:28px 32px 20px;text-align:center;border-bottom:1px solid #e8edf2;">
-              <img src="${opts.logoUrl}" alt="Nextzen Softech" height="50" style="height:50px;max-height:60px;width:auto;display:inline-block;" />
+              <img src="${opts.logoUrl}" alt="Isitonlineornot" height="50" style="height:50px;max-height:60px;width:auto;display:inline-block;" />
               <p style="margin:10px 0 0;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">Website Monitoring System</p>
             </td>
           </tr>
