@@ -72,6 +72,7 @@ const faqs = [
 ];
 
 export default function LandingPage() {
+  const { session } = useAuth();
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CheckResult>(null);
