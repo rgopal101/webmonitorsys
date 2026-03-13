@@ -35,7 +35,7 @@ function buildVerificationEmail(opts: { name: string; email: string; verifyUrl: 
         <tr><td style="background:#fff;padding:32px;">
           <p style="margin:0 0 16px;color:#0f172a;font-size:16px;">Hi <strong>${opts.name}</strong>,</p>
           <p style="margin:0 0 16px;color:#334155;font-size:15px;line-height:1.6;">
-            Thank you for signing up with <strong>Nextzen Softech Monitoring System</strong>. Please click the button below to verify your email address and activate your account.
+            Thank you for signing up with <strong>Isitonlineornot</strong>. Please click the button below to verify your email address and activate your account.
           </p>
 
           <table role="presentation" width="100%" style="background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;margin:0 0 24px;">
