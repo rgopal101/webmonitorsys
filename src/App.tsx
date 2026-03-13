@@ -18,6 +18,7 @@ import SubscriptionsPage from "@/pages/SubscriptionsPage";
 import PricingPage from "@/pages/PricingPage";
 import ReportsPage from "@/pages/ReportsPage";
 import ProfilePage from "@/pages/ProfilePage";
+import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import NotFound from "@/pages/NotFound";
 import LandingPage from "@/pages/LandingPage";
 import WhyUsePage from "@/pages/WhyUsePage";
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/why-use" element={<WhyUsePage />} />
             <Route path="/how-it-works" element={<HowItWorksPage />} />
