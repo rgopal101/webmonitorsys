@@ -39,31 +39,10 @@ export default function SignupPage() {
     if (error) {
       setError(error.message);
     } else {
-      setSuccess(true);
+      navigate("/dashboard");
     }
     setLoading(false);
   };
-
-  if (success) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background p-4">
-        <div className="w-full max-w-sm animate-fade-in text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-success/10 border border-success/20">
-            <CheckCircle2 className="h-7 w-7 text-success" />
-          </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Check Your Email</h1>
-          <p className="text-muted-foreground mb-6">
-            We've sent a verification link to <strong className="text-foreground">{email}</strong>. Please verify your email to activate your account.
-          </p>
-          <Link to="/login">
-            <Button variant="outline" className="w-full">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Login
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
