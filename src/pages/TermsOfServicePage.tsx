@@ -74,6 +74,7 @@ export default function TermsOfServicePage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

@@ -91,6 +91,7 @@ export default function WhyUsePage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

@@ -46,6 +46,7 @@ export default function FaqPage() {
           </Accordion>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }
