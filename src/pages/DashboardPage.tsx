@@ -47,6 +47,7 @@ export default function DashboardPage() {
 
   const { data: subscriptions } = useQuery({
     queryKey: ["subscriptions-stats"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase.from("user_subscriptions").select("*");
       return data ?? [];
