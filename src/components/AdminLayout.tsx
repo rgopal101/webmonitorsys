@@ -3,7 +3,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   LayoutDashboard, Users, Globe, ScrollText, Settings, LogOut, Activity,
-  Menu, X, ChevronDown
+  Menu, X, Crown, BarChart3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -12,8 +12,9 @@ const navItems = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/users", icon: Users, label: "Users" },
   { to: "/websites", icon: Globe, label: "Websites" },
-  { to: "/subscriptions", icon: ScrollText, label: "Subscriptions" },
+  { to: "/subscriptions", icon: Crown, label: "Subscriptions" },
   { to: "/activity-logs", icon: ScrollText, label: "Activity Logs" },
+  { to: "/reports", icon: BarChart3, label: "Reports" },
   { to: "/settings", icon: Settings, label: "SMTP Settings" },
 ];
 
@@ -29,12 +30,10 @@ export default function AdminLayout() {
 
   return (
     <div className="dark flex min-h-screen bg-background">
-      {/* Mobile overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* Sidebar */}
       <aside className={cn(
         "fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-sidebar border-r border-sidebar-border transition-transform duration-200 lg:static lg:translate-x-0",
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -86,7 +85,6 @@ export default function AdminLayout() {
         </div>
       </aside>
 
-      {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
         <header className="flex h-16 items-center gap-4 border-b border-border px-6 bg-card/50">
           <button className="lg:hidden" onClick={() => setSidebarOpen(true)}>

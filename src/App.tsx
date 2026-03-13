@@ -16,6 +16,7 @@ import ActivityLogsPage from "@/pages/ActivityLogsPage";
 import SmtpSettingsPage from "@/pages/SmtpSettingsPage";
 import SubscriptionsPage from "@/pages/SubscriptionsPage";
 import PricingPage from "@/pages/PricingPage";
+import ReportsPage from "@/pages/ReportsPage";
 import NotFound from "@/pages/NotFound";
 import LandingPage from "@/pages/LandingPage";
 
@@ -50,6 +51,7 @@ const App = () => (
               <Route path="/websites" element={<WebsitesPage />} />
               <Route path="/subscriptions" element={<SubscriptionsPage />} />
               <Route path="/activity-logs" element={<ActivityLogsPage />} />
+              <Route path="/reports" element={<ReportsPage />} />
               <Route path="/settings" element={<SmtpSettingsPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
