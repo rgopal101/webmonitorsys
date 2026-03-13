@@ -4,8 +4,9 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Globe, Lock, Mail, User, CheckCircle2, ArrowLeft } from "lucide-react";
+import { Lock, Mail, User, CheckCircle2, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useLogo } from "@/hooks/useSiteSettings";
 
 const PLAN_INFO: Record<string, string> = {
   starter: "Starter plan: 5 domains, 2 notification emails, basic monitoring",
@@ -15,6 +16,7 @@ const PLAN_INFO: Record<string, string> = {
 
 export default function SignupPage() {
   const navigate = useNavigate();
+  const { logoUrl, logoAlt } = useLogo();
   const [searchParams] = useSearchParams();
   const selectedPlan = searchParams.get("plan");
   const [fullName, setFullName] = useState("");
@@ -88,11 +90,8 @@ export default function SignupPage() {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-sm animate-fade-in">
         <div className="mb-8 text-center">
-          <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Globe className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-bold">isitonlineornot<span className="text-primary">.com</span></span>
+          <Link to="/" className="inline-flex items-center mb-6">
+            <img src={logoUrl} alt={logoAlt} className="h-10 w-auto object-contain" />
           </Link>
           <h1 className="text-2xl font-bold text-foreground">Create Your Account</h1>
           <p className="mt-1 text-sm text-muted-foreground">Start monitoring your websites for free</p>
