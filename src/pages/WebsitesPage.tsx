@@ -307,8 +307,11 @@ export default function WebsitesPage() {
                 <td className="px-6 py-4 text-sm font-mono text-foreground">{w.response_time_ms ? `${w.response_time_ms}ms` : "—"}</td>
                 <td className="px-6 py-4">
                   {(w as any).last_error ? (
-                    <span className="inline-flex items-center gap-1 text-xs text-destructive max-w-[200px] truncate" title={(w as any).last_error}>
-                      ⚠️ {(w as any).last_error}
+                    <span className={cn(
+                      "inline-flex items-center gap-1 text-xs max-w-[220px] truncate",
+                      (w as any).last_error?.includes("Cloudflare") ? "text-amber-500" : "text-destructive"
+                    )} title={(w as any).last_error}>
+                      {(w as any).last_error?.includes("Cloudflare") ? "🛡️" : "⚠️"} {(w as any).last_error}
                     </span>
                   ) : (
                     <span className="text-xs text-[hsl(var(--success))]">✓ No errors</span>
