@@ -123,7 +123,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-primary hover:underline font-medium">Sign up free</Link>
+            <Link to={selectedPlan ? `/signup?plan=${selectedPlan}` : "/signup"} className="text-primary hover:underline font-medium">Sign up free</Link>
           </p>
         </form>
       </div>

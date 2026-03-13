@@ -73,10 +73,11 @@ export default function PricingPage() {
   const [searchParams] = useSearchParams();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
-  // Handle PayPal return
+  // Handle PayPal return or auto-pay after login
   useEffect(() => {
     const token = searchParams.get("token");
     const paymentStatus = searchParams.get("payment");
+    const autoPay = searchParams.get("auto_pay");
 
     if (paymentStatus === "cancelled") {
       toast.error("Payment was cancelled");
@@ -84,8 +85,14 @@ export default function PricingPage() {
     }
 
     if (token && user) {
-      // Capture the PayPal order
       capturePayPalOrder(token);
+    }
+
+    // Auto-trigger PayPal after login redirect
+    if (autoPay && user && PLAN_PRICES_MAP[autoPay]) {
+      // Clean URL and trigger payment
+      window.history.replaceState({}, "", "/pricing");
+      handlePayPal(autoPay);
     }
   }, [searchParams, user]);
 
