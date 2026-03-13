@@ -172,7 +172,7 @@ function LogoIconsTab() {
 
     const { error: uploadError } = await supabase.storage
       .from("email-assets")
-      .upload(filePath, file, { upsert: true });
+      .upload(filePath, file);
 
     if (uploadError) {
       toast.error("Upload failed: " + uploadError.message);
