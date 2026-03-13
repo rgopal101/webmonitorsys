@@ -157,8 +157,8 @@ async function sendAlert(smtpSettings: any, site: any, status: string) {
     : "Great news! The following website has recovered and is back online.";
 
   const subject = isDown
-    ? `🔴 ALERT: ${site.name} is DOWN — Nextzen Softech Monitoring`
-    : `🟢 RECOVERY: ${site.name} is back ONLINE — Nextzen Softech Monitoring`;
+    ? `🔴 ALERT: ${site.name} is DOWN — Isitonlineornot`
+    : `🟢 RECOVERY: ${site.name} is back ONLINE — Isitonlineornot`;
 
   const html = buildEmailTemplate({
     logoUrl: LOGO_URL,
