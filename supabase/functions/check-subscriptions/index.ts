@@ -55,8 +55,8 @@ function buildRenewalEmail(opts: { name: string; email: string; plan: string; ex
           <p style="margin:20px 0 0;color:#94a3b8;font-size:12px;text-align:center;">If you don't renew, your monitoring will be automatically suspended.</p>
         </td></tr>
         <tr><td style="background:#f1f5f9;padding:28px 32px;text-align:center;border-top:1px solid #e2e8f0;">
-          <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Nextzen Softech Monitoring System</p>
-          <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">&copy; ${new Date().getFullYear()} Nextzen Softech. All rights reserved.</p>
+          <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Isitonlineornot</p>
+          <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">&copy; ${new Date().getFullYear()} Isitonlineornot. All rights reserved.</p>
         </td></tr>
       </table>
     </td></tr>
