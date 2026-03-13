@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import {
@@ -90,6 +91,7 @@ export default function WhyUsePage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

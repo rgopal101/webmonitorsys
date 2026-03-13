@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 
 const sections = [
@@ -73,6 +74,7 @@ export default function TermsOfServicePage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { ArrowRight, Search, Server, BarChart3, Bell } from "lucide-react";
@@ -68,6 +69,7 @@ export default function HowItWorksPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }
