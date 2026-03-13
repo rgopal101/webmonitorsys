@@ -89,7 +89,7 @@ export default function PricingPage() {
     }
 
     // Auto-trigger PayPal after login redirect
-    if (autoPay && user && PLAN_PRICES_MAP[autoPay]) {
+    if (autoPay && user && plans.find(p => p.key === autoPay)) {
       // Clean URL and trigger payment
       window.history.replaceState({}, "", "/pricing");
       handlePayPal(autoPay);
