@@ -57,10 +57,10 @@ const plans = [
 
 const freePlan = {
   features: [
-    "Monitor up to 5 domains",
-    "2 notification emails",
+    "Monitor 1 domain",
+    "1 notification email",
     "Basic status checks",
-    "Basic dashboard",
+    "15-day free trial",
   ],
 };
 
