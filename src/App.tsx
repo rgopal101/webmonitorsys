@@ -18,6 +18,7 @@ import SubscriptionsPage from "@/pages/SubscriptionsPage";
 import PricingPage from "@/pages/PricingPage";
 import ReportsPage from "@/pages/ReportsPage";
 import ProfilePage from "@/pages/ProfilePage";
+import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import NotFound from "@/pages/NotFound";
 import LandingPage from "@/pages/LandingPage";
 import WhyUsePage from "@/pages/WhyUsePage";
