@@ -46,6 +46,33 @@ export type Database = {
           },
         ]
       }
+      paypal_settings: {
+        Row: {
+          client_id: string
+          client_secret: string
+          created_at: string
+          id: string
+          mode: string
+          updated_at: string
+        }
+        Insert: {
+          client_id?: string
+          client_secret?: string
+          created_at?: string
+          id?: string
+          mode?: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          client_secret?: string
+          created_at?: string
+          id?: string
+          mode?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

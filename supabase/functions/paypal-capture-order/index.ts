@@ -11,12 +11,24 @@ const PLAN_LIMITS: Record<string, { max_domains: number; max_emails: number }> =
   unlimited: { max_domains: 999, max_emails: 999 },
 };
 
-async function getPayPalAccessToken() {
-  const clientId = Deno.env.get("PAYPAL_CLIENT_ID");
-  const clientSecret = Deno.env.get("PAYPAL_CLIENT_SECRET");
-  const baseUrl = Deno.env.get("PAYPAL_BASE_URL") || "https://api-m.sandbox.paypal.com";
+async function getPayPalConfig() {
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+  );
+  const { data, error } = await supabase.from("paypal_settings").select("*").maybeSingle();
+  if (error || !data) throw new Error("PayPal settings not configured.");
+  if (!data.client_id || !data.client_secret) throw new Error("PayPal credentials are empty.");
 
-  if (!clientId || !clientSecret) throw new Error("PayPal credentials not configured");
+  const baseUrl = data.mode === "live"
+    ? "https://api-m.paypal.com"
+    : "https://api-m.sandbox.paypal.com";
+
+  return { clientId: data.client_id, clientSecret: data.client_secret, baseUrl };
+}
+
+async function getPayPalAccessToken() {
+  const { clientId, clientSecret, baseUrl } = await getPayPalConfig();
 
   const res = await fetch(`${baseUrl}/v1/oauth2/token`, {
     method: "POST",
@@ -29,7 +41,7 @@ async function getPayPalAccessToken() {
 
   const data = await res.json();
   if (!res.ok) throw new Error(`PayPal auth failed: ${JSON.stringify(data)}`);
-  return data.access_token;
+  return { accessToken: data.access_token, baseUrl };
 }
 
 Deno.serve(async (req) => {
@@ -46,8 +58,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const baseUrl = Deno.env.get("PAYPAL_BASE_URL") || "https://api-m.sandbox.paypal.com";
-    const accessToken = await getPayPalAccessToken();
+    const { accessToken, baseUrl } = await getPayPalAccessToken();
 
     const captureRes = await fetch(`${baseUrl}/v2/checkout/orders/${order_id}/capture`, {
       method: "POST",
@@ -67,12 +78,11 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Extract user_id and plan from custom_id
     const customId = captureData.purchase_units?.[0]?.payments?.captures?.[0]?.custom_id
       || captureData.purchase_units?.[0]?.custom_id;
-    
+
     if (!customId) throw new Error("Missing custom_id in PayPal order");
-    
+
     const [userId, plan] = customId.split("|");
     const limits = PLAN_LIMITS[plan];
     if (!limits) throw new Error(`Unknown plan: ${plan}`);
@@ -102,7 +112,6 @@ Deno.serve(async (req) => {
 
     if (updateError) throw updateError;
 
-    // Re-enable website tracking
     await supabase
       .from("websites")
       .update({ tracking_enabled: true })

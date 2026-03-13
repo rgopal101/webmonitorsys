@@ -11,12 +11,24 @@ const PLAN_PRICES: Record<string, { amount: string; name: string; max_domains: n
   unlimited: { amount: "15.00", name: "Unlimited Plan", max_domains: 999, max_emails: 999 },
 };
 
-async function getPayPalAccessToken() {
-  const clientId = Deno.env.get("PAYPAL_CLIENT_ID");
-  const clientSecret = Deno.env.get("PAYPAL_CLIENT_SECRET");
-  const baseUrl = Deno.env.get("PAYPAL_BASE_URL") || "https://api-m.sandbox.paypal.com";
+async function getPayPalConfig() {
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+  );
+  const { data, error } = await supabase.from("paypal_settings").select("*").maybeSingle();
+  if (error || !data) throw new Error("PayPal settings not configured. Please configure in admin settings.");
+  if (!data.client_id || !data.client_secret) throw new Error("PayPal credentials are empty. Please configure in admin settings.");
+  
+  const baseUrl = data.mode === "live"
+    ? "https://api-m.paypal.com"
+    : "https://api-m.sandbox.paypal.com";
 
-  if (!clientId || !clientSecret) throw new Error("PayPal credentials not configured");
+  return { clientId: data.client_id, clientSecret: data.client_secret, baseUrl };
+}
+
+async function getPayPalAccessToken() {
+  const { clientId, clientSecret, baseUrl } = await getPayPalConfig();
 
   const res = await fetch(`${baseUrl}/v1/oauth2/token`, {
     method: "POST",
@@ -29,7 +41,7 @@ async function getPayPalAccessToken() {
 
   const data = await res.json();
   if (!res.ok) throw new Error(`PayPal auth failed: ${JSON.stringify(data)}`);
-  return data.access_token;
+  return { accessToken: data.access_token, baseUrl };
 }
 
 Deno.serve(async (req) => {
@@ -48,8 +60,7 @@ Deno.serve(async (req) => {
     }
 
     const planInfo = PLAN_PRICES[plan];
-    const baseUrl = Deno.env.get("PAYPAL_BASE_URL") || "https://api-m.sandbox.paypal.com";
-    const accessToken = await getPayPalAccessToken();
+    const { accessToken, baseUrl } = await getPayPalAccessToken();
 
     const orderRes = await fetch(`${baseUrl}/v2/checkout/orders`, {
       method: "POST",

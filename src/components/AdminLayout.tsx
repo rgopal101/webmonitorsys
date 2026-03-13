@@ -16,7 +16,7 @@ const navItems = [
   { to: "/subscriptions", icon: Crown, label: "Subscriptions" },
   { to: "/activity-logs", icon: ScrollText, label: "Activity Logs" },
   { to: "/reports", icon: BarChart3, label: "Reports" },
-  { to: "/settings", icon: Settings, label: "SMTP Settings" },
+  { to: "/settings", icon: Settings, label: "Settings" },
 ];
 
 export default function AdminLayout() {
