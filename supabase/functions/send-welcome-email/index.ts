@@ -20,7 +20,7 @@ function buildVerificationEmail(opts: { name: string; email: string; verifyUrl: 
         
         <!-- Header -->
         <tr><td style="background:#fff;padding:28px 32px 20px;text-align:center;border-bottom:1px solid #e8edf2;">
-          <img src="${opts.logoUrl}" alt="Nextzen Softech" height="50" style="height:50px;width:auto;" />
+          <img src="${opts.logoUrl}" alt="Isitonlineornot" height="50" style="height:50px;width:auto;" />
           <p style="margin:10px 0 0;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">Email Verification</p>
         </td></tr>
 
