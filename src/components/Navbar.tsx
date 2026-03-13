@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Globe, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLogo } from "@/hooks/useSiteSettings";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -16,14 +17,13 @@ const navLinks = [
 export default function Navbar() {
   const { session, signOut } = useAuth();
   const location = useLocation();
+  const { logoUrl, logoAlt } = useLogo();
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <Globe className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <img src={logoUrl} alt={logoAlt} className="h-9 w-auto object-contain" />
           <span className="text-lg font-bold tracking-tight">
             isitonlineornot<span className="text-primary">.com</span>
           </span>

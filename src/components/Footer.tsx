@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
-import { Globe } from "lucide-react";
+import { useLogo } from "@/hooks/useSiteSettings";
 
 export default function Footer() {
+  const { logoUrl, logoAlt } = useLogo();
+
   return (
     <footer className="border-t border-border bg-card py-14">
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="mb-4 flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <Globe className="h-4 w-4 text-primary-foreground" />
-              </div>
+              <img src={logoUrl} alt={logoAlt} className="h-8 w-auto object-contain" />
               <span className="text-lg font-bold">isitonlineornot<span className="text-primary">.com</span></span>
             </div>
             <p className="max-w-sm text-sm text-muted-foreground leading-relaxed">
