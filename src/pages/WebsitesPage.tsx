@@ -85,6 +85,7 @@ export default function WebsitesPage() {
 
   const { data: websites, isLoading } = useQuery({
     queryKey: ["websites"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data, error } = await supabase.from("websites").select("*").order("created_at", { ascending: false });
       if (error) throw error;

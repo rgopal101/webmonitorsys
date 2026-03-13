@@ -24,6 +24,8 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  useAdminRealtimeSync();
+
   const handleSignOut = async () => {
     await signOut();
     navigate("/login");

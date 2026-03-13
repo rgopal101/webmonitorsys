@@ -54,6 +54,7 @@ export default function UsersPage() {
   // User's domains for detail view
   const { data: userDomains } = useQuery({
     queryKey: ["user-domains", detailUser?.user_id],
+    ...LIVE_QUERY_OPTIONS,
     enabled: !!detailUser,
     queryFn: async () => {
       const { data } = await supabase.from("websites").select("*").eq("user_id", detailUser!.user_id);

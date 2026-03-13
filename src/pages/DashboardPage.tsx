@@ -56,6 +56,7 @@ export default function DashboardPage() {
 
   const { data: recentLogs } = useQuery({
     queryKey: ["recent-logs"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase
         .from("activity_logs")

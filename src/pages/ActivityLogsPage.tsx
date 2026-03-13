@@ -45,6 +45,7 @@ export default function ActivityLogsPage() {
 
   const { data: logs, isLoading } = useQuery({
     queryKey: ["activity-logs", filterWebsite, filterEvent, filterDate?.toISOString()],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       let query = supabase
         .from("activity_logs")

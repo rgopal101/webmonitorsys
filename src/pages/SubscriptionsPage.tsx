@@ -35,6 +35,7 @@ export default function SubscriptionsPage() {
 
   const { data: subscriptions, isLoading } = useQuery({
     queryKey: ["admin-subscriptions"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data: subs } = await supabase
         .from("user_subscriptions")

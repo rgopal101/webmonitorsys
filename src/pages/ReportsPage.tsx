@@ -58,6 +58,7 @@ export default function ReportsPage() {
 
   const { data: logs } = useQuery({
     queryKey: ["report-logs"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase
         .from("activity_logs")
