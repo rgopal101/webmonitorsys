@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 type CheckResult = {
   status: "online" | "offline" | "slow" | null;
