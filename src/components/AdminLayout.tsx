@@ -104,7 +104,7 @@ export default function AdminLayout() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={() => navigate("/admin/settings")} className="cursor-pointer">
+              <DropdownMenuItem onClick={() => navigate("/admin/profile")} className="cursor-pointer">
                 <User className="mr-2 h-4 w-4" />
                 My Profile
               </DropdownMenuItem>
