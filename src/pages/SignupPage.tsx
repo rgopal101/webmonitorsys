@@ -161,7 +161,9 @@ export default function SignupPage() {
 
         <div className="mt-6 rounded-xl border border-border bg-muted/30 p-4">
           <p className="text-xs text-muted-foreground text-center">
-            <strong className="text-foreground">Free plan includes:</strong> 5 domains, 2 notification emails, basic monitoring
+            <strong className="text-foreground">
+              {selectedPlan && PLAN_INFO[selectedPlan] ? PLAN_INFO[selectedPlan] : "Free plan includes: 1 domain, 1 notification email, 15-day trial"}
+            </strong>
           </p>
         </div>
       </div>
