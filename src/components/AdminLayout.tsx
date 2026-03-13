@@ -3,7 +3,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   LayoutDashboard, Users, Globe, ScrollText, Settings, LogOut, Activity,
-  Menu, X, Crown, BarChart3, PanelLeftClose, PanelLeft
+  Menu, X, Crown, BarChart3, ChevronsLeft, ChevronsRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
