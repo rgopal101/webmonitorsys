@@ -174,11 +174,8 @@ export default function ResetPasswordPage() {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-sm animate-fade-in">
         <div className="mb-8 text-center">
-          <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Globe className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-bold">isitonlineornot<span className="text-primary">.com</span></span>
+          <Link to="/" className="inline-flex items-center mb-6">
+            <img src={logoUrl} alt={logoAlt} className="h-10 w-auto object-contain" />
           </Link>
           <h1 className="text-2xl font-bold text-foreground">Forgot Password</h1>
           <p className="mt-1 text-sm text-muted-foreground">Enter your email and we'll send you a reset link</p>
