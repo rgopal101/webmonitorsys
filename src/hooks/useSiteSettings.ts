@@ -21,9 +21,10 @@ export function useSiteSettings(keys: string[]) {
 }
 
 export function useLogo() {
-  const { data } = useSiteSettings(["logo_url", "logo_alt_text"]);
+  const { data, isLoading } = useSiteSettings(["logo_url", "logo_alt_text"]);
   return {
-    logoUrl: data?.logo_url || "/images/logo-ns.svg",
+    logoUrl: data?.logo_url || "",
     logoAlt: data?.logo_alt_text || "Isitonlineornot",
+    logoLoading: isLoading,
   };
 }
