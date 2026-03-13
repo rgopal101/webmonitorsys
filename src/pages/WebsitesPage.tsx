@@ -257,7 +257,10 @@ export default function WebsitesPage() {
               <th className="px-6 py-3">Website</th>
               <th className="px-6 py-3">Notify</th>
               <th className="px-6 py-3">Status</th>
+              <th className="px-6 py-3">HTTP Code</th>
               <th className="px-6 py-3">Response</th>
+              <th className="px-6 py-3">Error / Reason</th>
+              <th className="px-6 py-3">Last Checked</th>
               <th className="px-6 py-3">Tracking</th>
               <th className="px-6 py-3">Actions</th>
             </tr>
