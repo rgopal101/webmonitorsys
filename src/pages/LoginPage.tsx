@@ -88,6 +88,7 @@ export default function LoginPage() {
               Selected plan: {PLAN_NAMES[selectedPlan]}
             </Badge>
           )}
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
