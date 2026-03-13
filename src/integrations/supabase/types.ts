@@ -135,6 +135,8 @@ export type Database = {
           id: string
           max_domains: number
           max_emails: number
+          payment_provider: string | null
+          paypal_subscription_id: string | null
           plan: string
           status: string
           stripe_customer_id: string | null
@@ -149,6 +151,8 @@ export type Database = {
           id?: string
           max_domains?: number
           max_emails?: number
+          payment_provider?: string | null
+          paypal_subscription_id?: string | null
           plan?: string
           status?: string
           stripe_customer_id?: string | null
@@ -163,6 +167,8 @@ export type Database = {
           id?: string
           max_domains?: number
           max_emails?: number
+          payment_provider?: string | null
+          paypal_subscription_id?: string | null
           plan?: string
           status?: string
           stripe_customer_id?: string | null
