@@ -33,8 +33,9 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="mt-10 border-t border-border pt-8 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} isitonlineornot.com — Website Monitoring Tool
+        <div className="mt-10 border-t border-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-muted-foreground">
+          <span>© {new Date().getFullYear()} isitonlineornot.com — Website Monitoring Tool</span>
+          <span>Developed and Designed By <a href="https://nextzensoftech.com/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Nextzen Softech</a></span>
         </div>
       </div>
     </footer>
