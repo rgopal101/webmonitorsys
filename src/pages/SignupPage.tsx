@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Globe, Lock, Mail, User } from "lucide-react";
+import { Globe, Lock, Mail, User, CheckCircle2, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function SignupPage() {
@@ -14,7 +14,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +27,7 @@ export default function SignupPage() {
       return;
     }
 
-    const { error } = await supabase.auth.signUp({
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -36,13 +36,45 @@ export default function SignupPage() {
       },
     });
 
-    if (error) {
-      setError(error.message);
-    } else {
-      navigate("/dashboard");
+    if (signUpError) {
+      setError(signUpError.message);
+      setLoading(false);
+      return;
     }
+
+    // Send welcome/confirmation email via SMTP
+    try {
+      await supabase.functions.invoke("send-welcome-email", {
+        body: { email, fullName },
+      });
+    } catch (e) {
+      console.warn("Welcome email could not be sent:", e);
+    }
+
+    setSuccess(true);
     setLoading(false);
   };
+
+  if (success) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background p-4">
+        <div className="w-full max-w-sm animate-fade-in text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 border border-primary/20">
+            <CheckCircle2 className="h-7 w-7 text-primary" />
+          </div>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Account Created!</h1>
+          <p className="text-muted-foreground mb-6">
+            A confirmation email has been sent to <strong className="text-foreground">{email}</strong>. You can now sign in to your account.
+          </p>
+          <Link to="/login">
+            <Button className="w-full">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Go to Login
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
