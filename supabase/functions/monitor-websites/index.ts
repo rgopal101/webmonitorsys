@@ -275,19 +275,20 @@ Deno.serve(async (req) => {
       last_error: lastError,
     };
 
-    // Only log and email on actual status change
+    // Log every check so Activity Logs always shows fresh monitoring data.
+    // Keep email alerts only for real status transitions.
     const statusChanged = previousStatus !== status;
-    
+    const reasonDetail = lastError ? ` Reason: ${lastError}` : "";
+
     if (statusChanged) {
       updateData.last_notified_status = status;
 
       const eventType = status === "online" ? "recovery" : "outage";
-      const errorDetail = lastError ? ` Reason: ${lastError}` : "";
       await supabase.from("activity_logs").insert({
         event_type: eventType,
         message: `${site.name} (${site.url}) went ${status}. ${
           responseTimeMs ? `Response time: ${responseTimeMs}ms` : "No response"
-        }${errorDetail}`,
+        }${reasonDetail}`,
         website_id: site.id,
       });
 
@@ -297,6 +298,15 @@ Deno.serve(async (req) => {
       } catch (emailErr) {
         console.error(`Failed to send email for ${site.name}:`, emailErr);
       }
+    } else {
+      const heartbeatEvent = status === "online" ? "online" : "offline";
+      await supabase.from("activity_logs").insert({
+        event_type: heartbeatEvent,
+        message: `${site.name} (${site.url}) check: ${status}. ${
+          responseTimeMs ? `Response time: ${responseTimeMs}ms` : "No response"
+        }${reasonDetail}`,
+        website_id: site.id,
+      });
     }
 
     await supabase
