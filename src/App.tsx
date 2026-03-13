@@ -58,13 +58,13 @@ const App = () => (
                 </ProtectedRoute>
               }
             >
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/users" element={<UsersPage />} />
-              <Route path="/websites" element={<WebsitesPage />} />
-              <Route path="/subscriptions" element={<SubscriptionsPage />} />
-              <Route path="/activity-logs" element={<ActivityLogsPage />} />
-              <Route path="/reports" element={<ReportsPage />} />
-              <Route path="/settings" element={<SmtpSettingsPage />} />
+              <Route path="/admin/dashboard" element={<DashboardPage />} />
+              <Route path="/admin/users" element={<UsersPage />} />
+              <Route path="/admin/websites" element={<WebsitesPage />} />
+              <Route path="/admin/subscriptions" element={<SubscriptionsPage />} />
+              <Route path="/admin/activity-logs" element={<ActivityLogsPage />} />
+              <Route path="/admin/reports" element={<ReportsPage />} />
+              <Route path="/admin/settings" element={<SmtpSettingsPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
