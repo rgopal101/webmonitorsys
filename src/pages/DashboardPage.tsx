@@ -38,6 +38,7 @@ export default function DashboardPage() {
 
   const { data: websites } = useQuery({
     queryKey: ["websites-stats"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase.from("websites").select("*");
       return data ?? [];
