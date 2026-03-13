@@ -25,24 +25,37 @@ serve(async (req) => {
     }
 
     const start = Date.now();
+    const fetchHeaders = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+      };
+
     try {
-      const response = await fetch(targetUrl, {
+      let response = await fetch(targetUrl, {
         method: "HEAD",
         signal: AbortSignal.timeout(10000),
         redirect: "follow",
-        headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-          "Accept-Language": "en-US,en;q=0.9",
-        },
+        headers: fetchHeaders,
       });
+
+      // Cloudflare blocks HEAD requests — retry with GET
+      if (response.status === 403) {
+        response = await fetch(targetUrl, {
+          method: "GET",
+          signal: AbortSignal.timeout(10000),
+          redirect: "follow",
+          headers: fetchHeaders,
+        });
+      }
+
       const responseTime = Date.now() - start;
 
       let status: "online" | "offline" | "slow" = "online";
       let lastError: string | null = null;
 
       if (!response.ok) {
-        status = response.status >= 500 ? "offline" : "offline";
+        status = "offline";
         lastError = `HTTP ${response.status} ${response.statusText}`;
       } else if (responseTime > 3000) {
         status = "slow";

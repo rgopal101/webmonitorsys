@@ -222,18 +222,30 @@ Deno.serve(async (req) => {
     try {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 15000);
+      const fetchHeaders = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+      };
 
       const start = performance.now();
-      const res = await fetch(site.url, {
+      let res = await fetch(site.url, {
         method: "HEAD",
         signal: controller.signal,
         redirect: "follow",
-        headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-          "Accept-Language": "en-US,en;q=0.9",
-        },
+        headers: fetchHeaders,
       });
+
+      // Cloudflare blocks HEAD requests — retry with GET
+      if (res.status === 403) {
+        res = await fetch(site.url, {
+          method: "GET",
+          signal: controller.signal,
+          redirect: "follow",
+          headers: fetchHeaders,
+        });
+      }
+
       const end = performance.now();
       clearTimeout(timeout);
 
