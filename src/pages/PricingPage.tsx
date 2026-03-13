@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Globe, ArrowRight, Zap, Loader2 } from "lucide-react";
@@ -140,31 +141,7 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Globe className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-bold tracking-tight">isitonlineornot<span className="text-primary">.com</span></span>
-          </Link>
-          <div className="hidden items-center gap-6 text-sm md:flex">
-            <Link to="/" className="text-muted-foreground transition hover:text-foreground">Home</Link>
-            <Link to="/pricing" className="text-foreground font-medium">Pricing</Link>
-          </div>
-          <div className="flex items-center gap-2">
-            {user ? (
-              <Link to="/my-dashboard"><Button size="sm">Dashboard</Button></Link>
-            ) : (
-              <>
-                <Link to="/login"><Button size="sm" variant="ghost">Login</Button></Link>
-                <Link to="/signup"><Button size="sm">Sign Up Free</Button></Link>
-              </>
-            )}
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero */}
       <section className="py-20 md:py-28">
