@@ -22,11 +22,8 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={logoUrl} alt={logoAlt} className="h-9 w-auto object-contain" />
-          <span className="text-lg font-bold tracking-tight">
-            isitonlineornot<span className="text-primary">.com</span>
-          </span>
+        <Link to="/" className="flex items-center">
+          <img src={logoUrl} alt={logoAlt} className="h-10 w-auto object-contain" />
         </Link>
 
         <div className="hidden items-center gap-6 text-sm md:flex">
