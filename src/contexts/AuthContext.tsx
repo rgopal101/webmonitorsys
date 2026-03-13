@@ -31,6 +31,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUserRole(data?.role ?? null);
   };
 
+  const fetchProfile = async (userId: string) => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("full_name")
+      .eq("user_id", userId)
+      .maybeSingle();
+    setUserName(data?.full_name || null);
+  };
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
