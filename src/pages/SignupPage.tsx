@@ -16,6 +16,7 @@ const PLAN_INFO: Record<string, string> = {
 
 export default function SignupPage() {
   const navigate = useNavigate();
+  const { logoUrl, logoAlt } = useLogo();
   const [searchParams] = useSearchParams();
   const selectedPlan = searchParams.get("plan");
   const [fullName, setFullName] = useState("");

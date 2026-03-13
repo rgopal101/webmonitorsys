@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useLogo } from "@/hooks/useSiteSettings";
 
 export default function ResetPasswordPage() {
+  const { logoUrl, logoAlt } = useLogo();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
