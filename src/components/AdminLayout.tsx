@@ -23,7 +23,7 @@ const navItems = [
 ];
 
 export default function AdminLayout() {
-  const { user, userRole, signOut } = useAuth();
+  const { user, userRole, userName, signOut } = useAuth();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
@@ -97,9 +97,9 @@ export default function AdminLayout() {
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted transition-colors">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
-                  {user?.email?.[0]?.toUpperCase() ?? "A"}
+                  {(userName || user?.email)?.[0]?.toUpperCase() ?? "A"}
                 </div>
-                <span className="hidden sm:block text-sm font-medium text-foreground">{user?.email}</span>
+                <span className="hidden sm:block text-sm font-medium text-foreground">{userName || user?.email}</span>
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
               </button>
             </DropdownMenuTrigger>
