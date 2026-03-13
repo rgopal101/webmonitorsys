@@ -111,12 +111,13 @@ export default function LandingPage() {
           <div className="hidden items-center gap-6 text-sm md:flex">
             <a href="#features" className="text-muted-foreground transition hover:text-foreground">Features</a>
             <a href="#how-it-works" className="text-muted-foreground transition hover:text-foreground">How It Works</a>
-            <a href="#monitoring" className="text-muted-foreground transition hover:text-foreground">Monitoring</a>
+            <Link to="/pricing" className="text-muted-foreground transition hover:text-foreground">Pricing</Link>
             <a href="#faq" className="text-muted-foreground transition hover:text-foreground">FAQ</a>
           </div>
-          <Link to="/login">
-            <Button size="sm" variant="outline">Admin Login</Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link to="/login"><Button size="sm" variant="ghost">Login</Button></Link>
+            <Link to="/signup"><Button size="sm">Sign Up Free</Button></Link>
+          </div>
         </div>
       </nav>
 
@@ -257,9 +258,9 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link to="/login">
+              <Link to="/signup">
                 <Button size="lg" className="rounded-xl px-8 text-base font-semibold">
-                  Start Monitoring <ArrowRight className="ml-1 h-4 w-4" />
+                  Start Monitoring Free <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
               </Link>
             </div>

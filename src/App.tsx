@@ -7,11 +7,14 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AdminLayout from "@/components/AdminLayout";
 import LoginPage from "@/pages/LoginPage";
+import SignupPage from "@/pages/SignupPage";
 import DashboardPage from "@/pages/DashboardPage";
+import UserDashboard from "@/pages/UserDashboard";
 import UsersPage from "@/pages/UsersPage";
 import WebsitesPage from "@/pages/WebsitesPage";
 import ActivityLogsPage from "@/pages/ActivityLogsPage";
 import SmtpSettingsPage from "@/pages/SmtpSettingsPage";
+import PricingPage from "@/pages/PricingPage";
 import NotFound from "@/pages/NotFound";
 import LandingPage from "@/pages/LandingPage";
 
@@ -27,6 +30,13 @@ const App = () => (
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            {/* User dashboard */}
+            <Route path="/my-dashboard" element={
+              <ProtectedRoute><UserDashboard /></ProtectedRoute>
+            } />
+            {/* Admin panel */}
             <Route
               element={
                 <ProtectedRoute>
