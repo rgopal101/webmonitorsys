@@ -258,9 +258,9 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link to="/login">
+              <Link to="/signup">
                 <Button size="lg" className="rounded-xl px-8 text-base font-semibold">
-                  Start Monitoring <ArrowRight className="ml-1 h-4 w-4" />
+                  Start Monitoring Free <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
               </Link>
             </div>
