@@ -29,6 +29,7 @@ export default function UsersPage() {
 
   const { data: users, isLoading } = useQuery({
     queryKey: ["users-list"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data: profiles, error } = await supabase.from("profiles").select("*");
       if (error) throw error;
