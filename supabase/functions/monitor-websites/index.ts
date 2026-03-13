@@ -134,7 +134,7 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
 </html>`;
 }
 
-async function sendAlert(smtpSettings: any, site: any, status: string) {
+async function sendAlert(smtpSettings: any, site: any, status: string, supabaseClient?: any) {
   if (!smtpSettings) return;
 
   const isSSL = smtpSettings.encryption === "ssl" || smtpSettings.port === 465;
