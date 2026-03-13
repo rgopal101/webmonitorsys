@@ -9,9 +9,8 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
-            <div className="mb-4 flex items-center gap-2">
-              <img src={logoUrl} alt={logoAlt} className="h-8 w-auto object-contain" />
-              <span className="text-lg font-bold">isitonlineornot<span className="text-primary">.com</span></span>
+            <div className="mb-4">
+              <img src={logoUrl} alt={logoAlt} className="h-10 w-auto object-contain" />
             </div>
             <p className="max-w-sm text-sm text-muted-foreground leading-relaxed">
               Free website monitoring and status checking tool. Check if any website is online or down instantly.
