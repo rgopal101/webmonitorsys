@@ -1,15 +1,24 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Globe, Lock, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Badge } from "@/components/ui/badge";
+
+const PLAN_NAMES: Record<string, string> = {
+  starter: "Starter – $1/mo",
+  professional: "Professional – $5/mo",
+  unlimited: "Unlimited – $15/mo",
+};
 
 export default function LoginPage() {
   const { signIn, session } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const selectedPlan = searchParams.get("plan");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -17,7 +26,11 @@ export default function LoginPage() {
 
   // If already logged in, redirect
   if (session) {
-    navigate("/my-dashboard");
+    if (selectedPlan) {
+      navigate(`/pricing?auto_pay=${selectedPlan}`);
+    } else {
+      navigate("/my-dashboard");
+    }
     return null;
   }
 
@@ -31,6 +44,14 @@ export default function LoginPage() {
       setLoading(false);
       return;
     }
+
+    // If a plan was selected, redirect to pricing to auto-pay
+    if (selectedPlan) {
+      navigate(`/pricing?auto_pay=${selectedPlan}`);
+      setLoading(false);
+      return;
+    }
+
     // Check role to redirect accordingly
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
@@ -62,6 +83,11 @@ export default function LoginPage() {
           </Link>
           <h1 className="text-2xl font-bold text-foreground">Welcome Back</h1>
           <p className="mt-1 text-sm text-muted-foreground">Sign in to your monitoring dashboard</p>
+          {selectedPlan && PLAN_NAMES[selectedPlan] && (
+            <Badge variant="secondary" className="mt-3 px-3 py-1">
+              Selected plan: {PLAN_NAMES[selectedPlan]}
+            </Badge>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -97,7 +123,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-primary hover:underline font-medium">Sign up free</Link>
+            <Link to={selectedPlan ? `/signup?plan=${selectedPlan}` : "/signup"} className="text-primary hover:underline font-medium">Sign up free</Link>
           </p>
         </form>
       </div>
