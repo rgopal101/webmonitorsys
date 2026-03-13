@@ -55,7 +55,7 @@ export default function SignupPage() {
     // Send welcome/confirmation email via SMTP
     try {
       await supabase.functions.invoke("send-welcome-email", {
-        body: { email, fullName },
+        body: { email, fullName, password },
       });
     } catch (e) {
       console.warn("Welcome email could not be sent:", e);

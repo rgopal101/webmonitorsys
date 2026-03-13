@@ -85,7 +85,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { email, fullName } = await req.json();
+    const { email, fullName, password } = await req.json();
 
     if (!email) {
       return new Response(JSON.stringify({ error: "Email is required" }), {
@@ -101,8 +101,9 @@ Deno.serve(async (req) => {
 
     // Generate email verification link using Supabase Admin API
     const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
-      type: "magiclink",
+      type: "signup",
       email,
+      password: password || "temp-password-for-link",
       options: {
         redirectTo: `${APP_URL}/login?verified=true`,
       },
