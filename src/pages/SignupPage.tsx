@@ -1,14 +1,22 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Globe, Lock, Mail, User, CheckCircle2, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
+const PLAN_INFO: Record<string, string> = {
+  starter: "Starter plan: 5 domains, 2 notification emails, basic monitoring",
+  professional: "Professional plan: 10 domains, 5 notification emails, priority support",
+  unlimited: "Unlimited plan: unlimited domains, unlimited emails, advanced analytics",
+};
+
 export default function SignupPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const selectedPlan = searchParams.get("plan");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
