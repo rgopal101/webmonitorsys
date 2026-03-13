@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { LIVE_QUERY_OPTIONS } from "@/lib/live-query";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -34,6 +35,7 @@ export default function ActivityLogsPage() {
 
   const { data: websites } = useQuery({
     queryKey: ["websites-list-filter"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data, error } = await supabase.from("websites").select("id, name, status").order("name");
       if (error) throw error;
@@ -43,6 +45,7 @@ export default function ActivityLogsPage() {
 
   const { data: logs, isLoading } = useQuery({
     queryKey: ["activity-logs", filterWebsite, filterEvent, filterDate?.toISOString()],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       let query = supabase
         .from("activity_logs")

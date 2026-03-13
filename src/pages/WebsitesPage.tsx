@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { LIVE_QUERY_OPTIONS } from "@/lib/live-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,6 +85,7 @@ export default function WebsitesPage() {
 
   const { data: websites, isLoading } = useQuery({
     queryKey: ["websites"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data, error } = await supabase.from("websites").select("*").order("created_at", { ascending: false });
       if (error) throw error;

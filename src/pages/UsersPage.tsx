@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { LIVE_QUERY_OPTIONS } from "@/lib/live-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +29,7 @@ export default function UsersPage() {
 
   const { data: users, isLoading } = useQuery({
     queryKey: ["users-list"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data: profiles, error } = await supabase.from("profiles").select("*");
       if (error) throw error;
@@ -52,6 +54,7 @@ export default function UsersPage() {
   // User's domains for detail view
   const { data: userDomains } = useQuery({
     queryKey: ["user-domains", detailUser?.user_id],
+    ...LIVE_QUERY_OPTIONS,
     enabled: !!detailUser,
     queryFn: async () => {
       const { data } = await supabase.from("websites").select("*").eq("user_id", detailUser!.user_id);

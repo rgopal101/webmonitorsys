@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { LIVE_QUERY_OPTIONS } from "@/lib/live-query";
 import {
   Users, Globe, Activity, AlertTriangle, Crown, DollarSign,
   TrendingUp, ArrowUpRight, ArrowDownRight, Clock
@@ -28,6 +29,7 @@ const PIE_COLORS = [
 export default function DashboardPage() {
   const { data: profiles } = useQuery({
     queryKey: ["profiles-count"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase.from("profiles").select("*");
       return data ?? [];
@@ -36,6 +38,7 @@ export default function DashboardPage() {
 
   const { data: websites } = useQuery({
     queryKey: ["websites-stats"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase.from("websites").select("*");
       return data ?? [];
@@ -44,6 +47,7 @@ export default function DashboardPage() {
 
   const { data: subscriptions } = useQuery({
     queryKey: ["subscriptions-stats"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase.from("user_subscriptions").select("*");
       return data ?? [];
@@ -52,6 +56,7 @@ export default function DashboardPage() {
 
   const { data: recentLogs } = useQuery({
     queryKey: ["recent-logs"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase
         .from("activity_logs")

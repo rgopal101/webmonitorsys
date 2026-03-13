@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAdminRealtimeSync } from "@/hooks/useAdminRealtimeSync";
 
 const navItems = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -22,6 +23,8 @@ export default function AdminLayout() {
   const { user, userRole, signOut } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useAdminRealtimeSync();
 
   const handleSignOut = async () => {
     await signOut();

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { LIVE_QUERY_OPTIONS } from "@/lib/live-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3 } from "lucide-react";
 import {
@@ -30,6 +31,7 @@ const tooltipStyle = {
 export default function ReportsPage() {
   const { data: subscriptions } = useQuery({
     queryKey: ["report-subscriptions"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase.from("user_subscriptions").select("*");
       return data ?? [];
@@ -38,6 +40,7 @@ export default function ReportsPage() {
 
   const { data: profiles } = useQuery({
     queryKey: ["report-profiles"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase.from("profiles").select("*");
       return data ?? [];
@@ -46,6 +49,7 @@ export default function ReportsPage() {
 
   const { data: websites } = useQuery({
     queryKey: ["report-websites"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase.from("websites").select("*");
       return data ?? [];
@@ -54,6 +58,7 @@ export default function ReportsPage() {
 
   const { data: logs } = useQuery({
     queryKey: ["report-logs"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase
         .from("activity_logs")
