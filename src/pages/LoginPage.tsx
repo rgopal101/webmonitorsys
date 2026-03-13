@@ -1,15 +1,24 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Globe, Lock, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Badge } from "@/components/ui/badge";
+
+const PLAN_NAMES: Record<string, string> = {
+  starter: "Starter – $1/mo",
+  professional: "Professional – $5/mo",
+  unlimited: "Unlimited – $15/mo",
+};
 
 export default function LoginPage() {
   const { signIn, session } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const selectedPlan = searchParams.get("plan");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -17,7 +26,11 @@ export default function LoginPage() {
 
   // If already logged in, redirect
   if (session) {
-    navigate("/my-dashboard");
+    if (selectedPlan) {
+      navigate(`/pricing?auto_pay=${selectedPlan}`);
+    } else {
+      navigate("/my-dashboard");
+    }
     return null;
   }
 
@@ -31,6 +44,14 @@ export default function LoginPage() {
       setLoading(false);
       return;
     }
+
+    // If a plan was selected, redirect to pricing to auto-pay
+    if (selectedPlan) {
+      navigate(`/pricing?auto_pay=${selectedPlan}`);
+      setLoading(false);
+      return;
+    }
+
     // Check role to redirect accordingly
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
