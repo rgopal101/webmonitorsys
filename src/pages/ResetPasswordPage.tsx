@@ -37,14 +37,20 @@ export default function ResetPasswordPage() {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase.auth.resetPasswordForEmail(emailForReset, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
+    try {
+      const { data, error } = await supabase.functions.invoke("send-auth-email", {
+        body: { email: emailForReset, type: "recovery" },
+      });
 
-    if (error) {
-      toast.error(error.message);
-    } else {
-      setEmailSent(true);
+      if (error) {
+        toast.error(error.message || "Failed to send reset email");
+      } else if (data?.error) {
+        toast.error(data.error);
+      } else {
+        setEmailSent(true);
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Something went wrong");
     }
     setLoading(false);
   };
