@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAdminRealtimeSync } from "@/hooks/useAdminRealtimeSync";
+import { useLogo } from "@/hooks/useSiteSettings";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
@@ -27,6 +28,7 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const { logoUrl, logoAlt } = useLogo();
 
   useAdminRealtimeSync();
 
@@ -47,9 +49,7 @@ export default function AdminLayout() {
         mobileOpen ? "translate-x-0 w-64" : "-translate-x-full lg:translate-x-0"
       )}>
         <div className="flex h-16 items-center gap-3 px-4 border-b border-sidebar-border">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/15">
-            <Activity className="h-5 w-5 text-sidebar-primary" />
-          </div>
+          <img src={logoUrl} alt={logoAlt} className="h-9 w-9 shrink-0 rounded-lg object-contain" />
           {!collapsed && <span className="text-lg font-bold text-sidebar-accent-foreground">WMS</span>}
           <button className="ml-auto lg:hidden" onClick={() => setMobileOpen(false)}>
             <X className="h-5 w-5 text-sidebar-foreground" />

@@ -7,7 +7,14 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-const LOGO_URL = "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
+async function getLogoUrl(supabase: any): Promise<string> {
+  const { data } = await supabase
+    .from("site_settings")
+    .select("setting_value")
+    .eq("setting_key", "logo_url")
+    .maybeSingle();
+  return data?.setting_value || "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
+}
 
 interface EmailTemplateOptions {
   logoUrl: string;
@@ -127,7 +134,7 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
 </html>`;
 }
 
-async function sendAlert(smtpSettings: any, site: any, status: string) {
+async function sendAlert(smtpSettings: any, site: any, status: string, supabaseClient?: any) {
   if (!smtpSettings) return;
 
   const isSSL = smtpSettings.encryption === "ssl" || smtpSettings.port === 465;
@@ -160,8 +167,10 @@ async function sendAlert(smtpSettings: any, site: any, status: string) {
     ? `🔴 ALERT: ${site.name} is DOWN — Isitonlineornot`
     : `🟢 RECOVERY: ${site.name} is back ONLINE — Isitonlineornot`;
 
+  const logoUrl = supabaseClient ? await getLogoUrl(supabaseClient) : "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
+
   const html = buildEmailTemplate({
-    logoUrl: LOGO_URL,
+    logoUrl,
     alertColor,
     alertGradient,
     statusIcon,
@@ -320,7 +329,7 @@ Deno.serve(async (req) => {
 
       // Send email alert only on status change
       try {
-        await sendAlert(smtpSettings, site, status);
+        await sendAlert(smtpSettings, site, status, supabase);
       } catch (emailErr) {
         console.error(`Failed to send email for ${site.name}:`, emailErr);
       }

@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Mail, Send, CreditCard, Eye, EyeOff, Search, Home, Image, Upload } from "lucide-react";
+import { Mail, Send, CreditCard, Eye, EyeOff, Search, Home, Image, Upload, Code } from "lucide-react";
+import { useSiteSettings as useSiteSettingsHook } from "@/hooks/useSiteSettings";
 
 // Helper hook to fetch and save site settings
 function useSiteSettings(keys: string[]) {
@@ -400,13 +401,75 @@ function PayPalTab() {
   );
 }
 
+// ─── Custom Scripts Tab ───
+function CustomScriptsTab() {
+  const keys = ["script_head", "script_body", "script_footer"];
+  const { data, isLoading, save, isSaving } = useSiteSettings(keys);
+  const [form, setForm] = useState<Record<string, string>>({});
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && Object.keys(data).length && !init) {
+      setForm(data);
+      setInit(true);
+    }
+  }, [data, isLoading, init]);
+
+  return (
+    <div className="max-w-2xl rounded-xl border border-border bg-card p-6">
+      <div className="mb-6 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+          <Code className="h-5 w-5 text-primary" />
+        </div>
+        <div>
+          <p className="font-semibold text-foreground">Custom Scripts</p>
+          <p className="text-xs text-muted-foreground">Add tracking codes, analytics, or custom scripts to your site</p>
+        </div>
+      </div>
+      <form onSubmit={(e) => { e.preventDefault(); save(form); }} className="space-y-5">
+        <div className="space-y-2">
+          <Label className="text-muted-foreground">Head Scripts <span className="text-xs text-muted-foreground">(Google Analytics, meta tags, etc.)</span></Label>
+          <Textarea
+            value={form.script_head || ""}
+            rows={5}
+            onChange={(e) => setForm(f => ({ ...f, script_head: e.target.value }))}
+            placeholder={'<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXX"></script>'}
+            className="bg-background border-border font-mono text-xs"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="text-muted-foreground">Body Scripts <span className="text-xs text-muted-foreground">(inserted at top of body)</span></Label>
+          <Textarea
+            value={form.script_body || ""}
+            rows={5}
+            onChange={(e) => setForm(f => ({ ...f, script_body: e.target.value }))}
+            placeholder="<!-- Google Tag Manager (noscript) -->"
+            className="bg-background border-border font-mono text-xs"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="text-muted-foreground">Footer Scripts <span className="text-xs text-muted-foreground">(inserted at end of body)</span></Label>
+          <Textarea
+            value={form.script_footer || ""}
+            rows={5}
+            onChange={(e) => setForm(f => ({ ...f, script_footer: e.target.value }))}
+            placeholder="<!-- Chat widgets, tracking pixels, etc. -->"
+            className="bg-background border-border font-mono text-xs"
+          />
+        </div>
+        <Button type="submit" disabled={isSaving}>{isSaving ? "Saving..." : "Save Scripts"}</Button>
+      </form>
+    </div>
+  );
+}
+
 // ─── Main Settings Page ───
 export default function SmtpSettingsPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className="text-2xl font-bold text-foreground">Settings</h1>
-        <p className="text-sm text-muted-foreground">Manage SEO, home page, branding, SMTP and payment settings</p>
+        <p className="text-sm text-muted-foreground">Manage SEO, home page, branding, scripts, SMTP and payment settings</p>
       </div>
 
       <Tabs defaultValue="seo" className="w-full">
@@ -420,6 +483,9 @@ export default function SmtpSettingsPage() {
           <TabsTrigger value="logo" className="gap-2">
             <Image className="h-4 w-4" /> Logo & Icons
           </TabsTrigger>
+          <TabsTrigger value="scripts" className="gap-2">
+            <Code className="h-4 w-4" /> Scripts
+          </TabsTrigger>
           <TabsTrigger value="smtp" className="gap-2">
             <Mail className="h-4 w-4" /> SMTP
           </TabsTrigger>
@@ -430,6 +496,7 @@ export default function SmtpSettingsPage() {
         <TabsContent value="seo" className="mt-6"><SeoTab /></TabsContent>
         <TabsContent value="homepage" className="mt-6"><HomePageTab /></TabsContent>
         <TabsContent value="logo" className="mt-6"><LogoIconsTab /></TabsContent>
+        <TabsContent value="scripts" className="mt-6"><CustomScriptsTab /></TabsContent>
         <TabsContent value="smtp" className="mt-6"><SmtpTab /></TabsContent>
         <TabsContent value="paypal" className="mt-6"><PayPalTab /></TabsContent>
       </Tabs>

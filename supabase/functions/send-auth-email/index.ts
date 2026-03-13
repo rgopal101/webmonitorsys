@@ -6,8 +6,16 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const LOGO_URL = "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
 const APP_URL = "https://webmonitorsys.lovable.app";
+
+async function getLogoUrl(supabase: any): Promise<string> {
+  const { data } = await supabase
+    .from("site_settings")
+    .select("setting_value")
+    .eq("setting_key", "logo_url")
+    .maybeSingle();
+  return data?.setting_value || "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
+}
 
 function buildPasswordResetEmail(opts: { email: string; resetUrl: string; logoUrl: string }) {
   return `<!DOCTYPE html>
@@ -141,13 +149,14 @@ Deno.serve(async (req) => {
     let subject: string;
     let html: string;
 
+    const logoUrl = await getLogoUrl(supabase);
+
     if (type === "recovery") {
       subject = "🔐 Reset your password — Isitonlineornot";
-      html = buildPasswordResetEmail({ email, resetUrl: actionLink, logoUrl: LOGO_URL });
+      html = buildPasswordResetEmail({ email, resetUrl: actionLink, logoUrl });
     } else {
-      // Default: verification email (reuse existing welcome template pattern)
       subject = "✉️ Verify your email — Isitonlineornot";
-      html = buildPasswordResetEmail({ email, resetUrl: actionLink, logoUrl: LOGO_URL });
+      html = buildPasswordResetEmail({ email, resetUrl: actionLink, logoUrl });
     }
 
     await transporter.sendMail({
