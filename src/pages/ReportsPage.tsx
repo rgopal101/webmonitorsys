@@ -40,6 +40,7 @@ export default function ReportsPage() {
 
   const { data: profiles } = useQuery({
     queryKey: ["report-profiles"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase.from("profiles").select("*");
       return data ?? [];
