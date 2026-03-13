@@ -24,7 +24,7 @@ function buildRenewalEmail(opts: { name: string; email: string; plan: string; ex
     <tr><td align="center">
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.08);">
         <tr><td style="background:#fff;padding:28px 32px 20px;text-align:center;border-bottom:1px solid #e8edf2;">
-          <img src="${opts.logoUrl}" alt="Nextzen Softech" height="50" style="height:50px;width:auto;" />
+          <img src="${opts.logoUrl}" alt="Isitonlineornot" height="50" style="height:50px;width:auto;" />
           <p style="margin:10px 0 0;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">Subscription Renewal</p>
         </td></tr>
         <tr><td style="background:${urgencyGradient};padding:32px;text-align:center;">
@@ -55,8 +55,8 @@ function buildRenewalEmail(opts: { name: string; email: string; plan: string; ex
           <p style="margin:20px 0 0;color:#94a3b8;font-size:12px;text-align:center;">If you don't renew, your monitoring will be automatically suspended.</p>
         </td></tr>
         <tr><td style="background:#f1f5f9;padding:28px 32px;text-align:center;border-top:1px solid #e2e8f0;">
-          <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Nextzen Softech Monitoring System</p>
-          <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">&copy; ${new Date().getFullYear()} Nextzen Softech. All rights reserved.</p>
+          <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Isitonlineornot</p>
+          <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">&copy; ${new Date().getFullYear()} Isitonlineornot. All rights reserved.</p>
         </td></tr>
       </table>
     </td></tr>
@@ -144,7 +144,7 @@ Deno.serve(async (req) => {
           });
 
           await transporter.sendMail({
-            from: `"Nextzen Softech Monitor" <${smtpSettings.email}>`,
+            from: `"Isitonlineornot" <${smtpSettings.email}>`,
             to: email,
             subject: `🔴 Subscription Expired — Your monitoring has been suspended`,
             html,
@@ -181,7 +181,7 @@ Deno.serve(async (req) => {
         });
 
         await transporter.sendMail({
-          from: `"Nextzen Softech Monitor" <${smtpSettings.email}>`,
+          from: `"Isitonlineornot" <${smtpSettings.email}>`,
           to: email,
           subject: `⏰ Subscription expiring in ${daysLeft} day${daysLeft > 1 ? "s" : ""} — Renew now`,
           html,

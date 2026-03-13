@@ -28,7 +28,7 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nextzen Softech Monitoring</title>
+  <title>Isitonlineornot</title>
 </head>
 <body style="margin:0;padding:0;background-color:#f0f4f8;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;-webkit-font-smoothing:antialiased;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f4f8;padding:40px 16px;">
@@ -39,7 +39,7 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
           <!-- LOGO HEADER (white background) -->
           <tr>
             <td style="background:#ffffff;padding:28px 32px 20px;text-align:center;border-bottom:1px solid #e8edf2;">
-              <img src="${opts.logoUrl}" alt="Nextzen Softech" height="50" style="height:50px;max-height:60px;width:auto;display:inline-block;" />
+              <img src="${opts.logoUrl}" alt="Isitonlineornot" height="50" style="height:50px;max-height:60px;width:auto;display:inline-block;" />
               <p style="margin:10px 0 0;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">Website Monitoring System</p>
             </td>
           </tr>
@@ -106,16 +106,16 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
           <!-- FOOTER -->
           <tr>
             <td style="background:#f1f5f9;padding:28px 32px;text-align:center;border-top:1px solid #e2e8f0;">
-              <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Nextzen Softech Monitoring System</p>
+              <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Isitonlineornot</p>
               <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;line-height:1.6;">You are receiving this alert because your website is being monitored.</p>
               <table role="presentation" cellpadding="0" cellspacing="0" style="margin:14px auto 0;">
                 <tr>
-                  <td style="padding:0 8px;"><a href="mailto:info@nextzensoftech.com" style="color:#2563eb;font-size:12px;text-decoration:none;">info@nextzensoftech.com</a></td>
+                  <td style="padding:0 8px;"><a href="mailto:info@isitonlineornot.com" style="color:#2563eb;font-size:12px;text-decoration:none;">info@isitonlineornot.com</a></td>
                   <td style="color:#cbd5e1;font-size:12px;">|</td>
-                  <td style="padding:0 8px;"><a href="https://nextzensoftech.com/" style="color:#2563eb;font-size:12px;text-decoration:none;">nextzensoftech.com</a></td>
+                  <td style="padding:0 8px;"><a href="https://isitonlineornot.com/" style="color:#2563eb;font-size:12px;text-decoration:none;">isitonlineornot.com</a></td>
                 </tr>
               </table>
-              <p style="margin:16px 0 0;color:#cbd5e1;font-size:11px;">&copy; ${new Date().getFullYear()} Nextzen Softech. All rights reserved.</p>
+              <p style="margin:16px 0 0;color:#cbd5e1;font-size:11px;">&copy; ${new Date().getFullYear()} Isitonlineornot. All rights reserved.</p>
             </td>
           </tr>
 
@@ -157,8 +157,8 @@ async function sendAlert(smtpSettings: any, site: any, status: string) {
     : "Great news! The following website has recovered and is back online.";
 
   const subject = isDown
-    ? `🔴 ALERT: ${site.name} is DOWN — Nextzen Softech Monitoring`
-    : `🟢 RECOVERY: ${site.name} is back ONLINE — Nextzen Softech Monitoring`;
+    ? `🔴 ALERT: ${site.name} is DOWN — Isitonlineornot`
+    : `🟢 RECOVERY: ${site.name} is back ONLINE — Isitonlineornot`;
 
   const html = buildEmailTemplate({
     logoUrl: LOGO_URL,
@@ -176,7 +176,7 @@ async function sendAlert(smtpSettings: any, site: any, status: string) {
   const recipients = site.owner_email.split(",").map((e: string) => e.trim()).filter(Boolean);
 
   await transporter.sendMail({
-    from: `"Nextzen Softech Monitor" <${smtpSettings.email}>`,
+    from: `"Isitonlineornot" <${smtpSettings.email}>`,
     to: recipients,
     subject,
     html,

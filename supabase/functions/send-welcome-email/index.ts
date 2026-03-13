@@ -20,7 +20,7 @@ function buildVerificationEmail(opts: { name: string; email: string; verifyUrl: 
         
         <!-- Header -->
         <tr><td style="background:#fff;padding:28px 32px 20px;text-align:center;border-bottom:1px solid #e8edf2;">
-          <img src="${opts.logoUrl}" alt="Nextzen Softech" height="50" style="height:50px;width:auto;" />
+          <img src="${opts.logoUrl}" alt="Isitonlineornot" height="50" style="height:50px;width:auto;" />
           <p style="margin:10px 0 0;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">Email Verification</p>
         </td></tr>
 
@@ -35,7 +35,7 @@ function buildVerificationEmail(opts: { name: string; email: string; verifyUrl: 
         <tr><td style="background:#fff;padding:32px;">
           <p style="margin:0 0 16px;color:#0f172a;font-size:16px;">Hi <strong>${opts.name}</strong>,</p>
           <p style="margin:0 0 16px;color:#334155;font-size:15px;line-height:1.6;">
-            Thank you for signing up with <strong>Nextzen Softech Monitoring System</strong>. Please click the button below to verify your email address and activate your account.
+            Thank you for signing up with <strong>Isitonlineornot</strong>. Please click the button below to verify your email address and activate your account.
           </p>
 
           <table role="presentation" width="100%" style="background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;margin:0 0 24px;">
@@ -61,8 +61,8 @@ function buildVerificationEmail(opts: { name: string; email: string; verifyUrl: 
 
         <!-- Footer -->
         <tr><td style="background:#f1f5f9;padding:28px 32px;text-align:center;border-top:1px solid #e2e8f0;">
-          <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Nextzen Softech Monitoring System</p>
-          <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">&copy; ${new Date().getFullYear()} Nextzen Softech. All rights reserved.</p>
+          <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Isitonlineornot</p>
+          <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">&copy; ${new Date().getFullYear()} Isitonlineornot. All rights reserved.</p>
         </td></tr>
 
       </table>
@@ -150,9 +150,9 @@ Deno.serve(async (req) => {
     });
 
     await transporter.sendMail({
-      from: `"Nextzen Softech Monitor" <${smtpSettings.email}>`,
+      from: `"Isitonlineornot" <${smtpSettings.email}>`,
       to: email,
-      subject: "✉️ Verify your email — Nextzen Softech Monitoring",
+      subject: "✉️ Verify your email — Isitonlineornot",
       html,
     });
 
