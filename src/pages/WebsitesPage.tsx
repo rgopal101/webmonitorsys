@@ -290,7 +290,33 @@ export default function WebsitesPage() {
                     {w.status}
                   </span>
                 </td>
+                <td className="px-6 py-4">
+                  {(w as any).http_status_code ? (
+                    <span className={cn(
+                      "inline-flex items-center rounded-md px-2 py-0.5 text-xs font-mono font-medium",
+                      (w as any).http_status_code >= 200 && (w as any).http_status_code < 300 ? "bg-[hsl(var(--success))]/10 text-[hsl(var(--success))]"
+                        : (w as any).http_status_code >= 400 ? "bg-destructive/10 text-destructive"
+                        : "bg-muted text-muted-foreground"
+                    )}>
+                      {(w as any).http_status_code}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-muted-foreground">—</span>
+                  )}
+                </td>
                 <td className="px-6 py-4 text-sm font-mono text-foreground">{w.response_time_ms ? `${w.response_time_ms}ms` : "—"}</td>
+                <td className="px-6 py-4">
+                  {(w as any).last_error ? (
+                    <span className="inline-flex items-center gap-1 text-xs text-destructive max-w-[200px] truncate" title={(w as any).last_error}>
+                      ⚠️ {(w as any).last_error}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-[hsl(var(--success))]">✓ No errors</span>
+                  )}
+                </td>
+                <td className="px-6 py-4 text-xs text-muted-foreground whitespace-nowrap">
+                  {w.last_checked_at ? new Date(w.last_checked_at).toLocaleString() : "Never"}
+                </td>
                 <td className="px-6 py-4">
                   <Switch checked={w.tracking_enabled} onCheckedChange={(v) => toggleTracking.mutate({ id: w.id, enabled: v })} />
                 </td>
