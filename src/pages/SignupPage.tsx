@@ -4,8 +4,9 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Globe, Lock, Mail, User, CheckCircle2, ArrowLeft } from "lucide-react";
+import { Lock, Mail, User, CheckCircle2, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useLogo } from "@/hooks/useSiteSettings";
 
 const PLAN_INFO: Record<string, string> = {
   starter: "Starter plan: 5 domains, 2 notification emails, basic monitoring",
