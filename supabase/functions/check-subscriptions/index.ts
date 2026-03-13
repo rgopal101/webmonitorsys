@@ -24,7 +24,7 @@ function buildRenewalEmail(opts: { name: string; email: string; plan: string; ex
     <tr><td align="center">
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.08);">
         <tr><td style="background:#fff;padding:28px 32px 20px;text-align:center;border-bottom:1px solid #e8edf2;">
-          <img src="${opts.logoUrl}" alt="Nextzen Softech" height="50" style="height:50px;width:auto;" />
+          <img src="${opts.logoUrl}" alt="Isitonlineornot" height="50" style="height:50px;width:auto;" />
           <p style="margin:10px 0 0;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">Subscription Renewal</p>
         </td></tr>
         <tr><td style="background:${urgencyGradient};padding:32px;text-align:center;">
