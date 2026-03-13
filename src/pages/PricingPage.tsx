@@ -57,10 +57,10 @@ const plans = [
 
 const freePlan = {
   features: [
-    "Monitor up to 5 domains",
-    "2 notification emails",
+    "Monitor 1 domain",
+    "1 notification email",
     "Basic status checks",
-    "Basic dashboard",
+    "15-day free trial",
   ],
 };
 
@@ -107,8 +107,8 @@ export default function PricingPage() {
       {/* Free Tier Banner */}
       <div className="mx-auto max-w-4xl px-4 mb-12">
         <div className="rounded-2xl border border-success/30 bg-success/5 p-6 text-center">
-          <h3 className="text-lg font-semibold mb-2">🎉 Free Forever Plan</h3>
-          <p className="text-sm text-muted-foreground mb-4">Get started with no credit card required</p>
+          <h3 className="text-lg font-semibold mb-2">🎉 15-Day Free Trial</h3>
+          <p className="text-sm text-muted-foreground mb-4">Try it free for 15 days — no credit card required</p>
           <div className="flex flex-wrap justify-center gap-4">
             {freePlan.features.map((f) => (
               <span key={f} className="flex items-center gap-1.5 text-sm">
