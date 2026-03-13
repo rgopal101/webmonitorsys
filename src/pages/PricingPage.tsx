@@ -111,7 +111,8 @@ export default function PricingPage() {
 
   const handlePayPal = async (planKey: string) => {
     if (!user) {
-      toast.error("Please sign up or log in first");
+      // Redirect to login with selected plan
+      window.location.href = `/login?plan=${planKey}`;
       return;
     }
 
