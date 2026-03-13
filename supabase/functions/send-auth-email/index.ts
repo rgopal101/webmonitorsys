@@ -149,13 +149,14 @@ Deno.serve(async (req) => {
     let subject: string;
     let html: string;
 
+    const logoUrl = await getLogoUrl(supabase);
+
     if (type === "recovery") {
       subject = "🔐 Reset your password — Isitonlineornot";
-      html = buildPasswordResetEmail({ email, resetUrl: actionLink, logoUrl: LOGO_URL });
+      html = buildPasswordResetEmail({ email, resetUrl: actionLink, logoUrl });
     } else {
-      // Default: verification email (reuse existing welcome template pattern)
       subject = "✉️ Verify your email — Isitonlineornot";
-      html = buildPasswordResetEmail({ email, resetUrl: actionLink, logoUrl: LOGO_URL });
+      html = buildPasswordResetEmail({ email, resetUrl: actionLink, logoUrl });
     }
 
     await transporter.sendMail({

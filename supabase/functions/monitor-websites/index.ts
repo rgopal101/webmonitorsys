@@ -7,7 +7,14 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-const LOGO_URL = "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
+async function getLogoUrl(supabase: any): Promise<string> {
+  const { data } = await supabase
+    .from("site_settings")
+    .select("setting_value")
+    .eq("setting_key", "logo_url")
+    .maybeSingle();
+  return data?.setting_value || "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
+}
 
 interface EmailTemplateOptions {
   logoUrl: string;

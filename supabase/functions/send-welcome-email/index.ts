@@ -150,11 +150,12 @@ Deno.serve(async (req) => {
       socketTimeout: 15000,
     });
 
+    const logoUrl = await getLogoUrl(supabase);
     const html = buildVerificationEmail({
       name: fullName || email,
       email,
       verifyUrl,
-      logoUrl: LOGO_URL,
+      logoUrl,
     });
 
     await transporter.sendMail({
