@@ -1,13 +1,18 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Globe, ArrowRight, Zap } from "lucide-react";
-import { Link } from "react-router-dom";
+import { CheckCircle2, Globe, ArrowRight, Zap, Loader2 } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 const plans = [
   {
     name: "Starter",
+    key: "starter",
     price: "$1",
     period: "/month",
     description: "Perfect for personal projects and small websites.",
@@ -18,11 +23,11 @@ const plans = [
       "Basic dashboard",
       "Email alerts",
     ],
-    cta: "Get Started",
     popular: false,
   },
   {
     name: "Professional",
+    key: "professional",
     price: "$5",
     period: "/month",
     description: "For growing businesses that need detailed insights.",
@@ -34,11 +39,11 @@ const plans = [
       "Status analytics",
       "Priority support",
     ],
-    cta: "Get Started",
     popular: true,
   },
   {
     name: "Unlimited",
+    key: "unlimited",
     price: "$15",
     period: "/month",
     description: "For teams and agencies managing many websites.",
@@ -50,7 +55,6 @@ const plans = [
       "Priority support",
       "Custom check intervals",
     ],
-    cta: "Get Started",
     popular: false,
   },
 ];
@@ -59,12 +63,81 @@ const freePlan = {
   features: [
     "Monitor 1 domain",
     "1 notification email",
-    "Basic status checks",
     "15-day free trial",
   ],
 };
 
 export default function PricingPage() {
+  const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+
+  // Handle PayPal return
+  useEffect(() => {
+    const token = searchParams.get("token");
+    const paymentStatus = searchParams.get("payment");
+
+    if (paymentStatus === "cancelled") {
+      toast.error("Payment was cancelled");
+      return;
+    }
+
+    if (token && user) {
+      // Capture the PayPal order
+      capturePayPalOrder(token);
+    }
+  }, [searchParams, user]);
+
+  const capturePayPalOrder = async (orderId: string) => {
+    setLoadingPlan("capturing");
+    try {
+      const { data, error } = await supabase.functions.invoke("paypal-capture-order", {
+        body: { order_id: orderId },
+      });
+      if (error) throw error;
+      if (data?.success) {
+        toast.success(`Subscription activated! Plan: ${data.plan}`);
+        window.location.href = "/my-dashboard";
+      } else {
+        toast.error(data?.error || "Payment capture failed");
+      }
+    } catch (e: any) {
+      toast.error(e.message || "Payment failed");
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
+
+  const handlePayPal = async (planKey: string) => {
+    if (!user) {
+      toast.error("Please sign up or log in first");
+      return;
+    }
+
+    setLoadingPlan(planKey);
+    try {
+      const { data, error } = await supabase.functions.invoke("paypal-create-order", {
+        body: {
+          plan: planKey,
+          user_id: user.id,
+          return_url: `${window.location.origin}/pricing?payment=success`,
+          cancel_url: `${window.location.origin}/pricing?payment=cancelled`,
+        },
+      });
+      if (error) throw error;
+
+      if (data?.approval_url) {
+        window.location.href = data.approval_url;
+      } else {
+        toast.error("Could not create PayPal order");
+      }
+    } catch (e: any) {
+      toast.error(e.message || "PayPal error");
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
@@ -81,8 +154,14 @@ export default function PricingPage() {
             <Link to="/pricing" className="text-foreground font-medium">Pricing</Link>
           </div>
           <div className="flex items-center gap-2">
-            <Link to="/login"><Button size="sm" variant="ghost">Login</Button></Link>
-            <Link to="/signup"><Button size="sm">Sign Up Free</Button></Link>
+            {user ? (
+              <Link to="/my-dashboard"><Button size="sm">Dashboard</Button></Link>
+            ) : (
+              <>
+                <Link to="/login"><Button size="sm" variant="ghost">Login</Button></Link>
+                <Link to="/signup"><Button size="sm">Sign Up Free</Button></Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -159,11 +238,18 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link to="/signup">
-                  <Button className="w-full" variant={plan.popular ? "default" : "outline"}>
-                    {plan.cta} <ArrowRight className="ml-1 h-4 w-4" />
-                  </Button>
-                </Link>
+                <Button
+                  className="w-full"
+                  variant={plan.popular ? "default" : "outline"}
+                  onClick={() => handlePayPal(plan.key)}
+                  disabled={loadingPlan !== null}
+                >
+                  {loadingPlan === plan.key ? (
+                    <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Processing...</>
+                  ) : (
+                    <>Pay with PayPal <ArrowRight className="ml-1 h-4 w-4" /></>
+                  )}
+                </Button>
               </motion.div>
             ))}
           </div>
