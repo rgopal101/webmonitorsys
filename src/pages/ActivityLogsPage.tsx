@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { LIVE_QUERY_OPTIONS } from "@/lib/live-query";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";

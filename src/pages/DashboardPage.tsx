@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { LIVE_QUERY_OPTIONS } from "@/lib/live-query";
 import {
   Users, Globe, Activity, AlertTriangle, Crown, DollarSign,
   TrendingUp, ArrowUpRight, ArrowDownRight, Clock
