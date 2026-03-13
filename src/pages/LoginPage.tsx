@@ -17,6 +17,7 @@ const PLAN_NAMES: Record<string, string> = {
 
 export default function LoginPage() {
   const { signIn, session } = useAuth();
+  const { logoUrl, logoAlt } = useLogo();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const selectedPlan = searchParams.get("plan");
