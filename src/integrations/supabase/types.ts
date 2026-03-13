@@ -181,8 +181,10 @@ export type Database = {
       websites: {
         Row: {
           created_at: string
+          http_status_code: number | null
           id: string
           last_checked_at: string | null
+          last_error: string | null
           last_notified_status: string | null
           name: string
           owner_email: string
@@ -195,8 +197,10 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          http_status_code?: number | null
           id?: string
           last_checked_at?: string | null
+          last_error?: string | null
           last_notified_status?: string | null
           name: string
           owner_email: string
@@ -209,8 +213,10 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          http_status_code?: number | null
           id?: string
           last_checked_at?: string | null
+          last_error?: string | null
           last_notified_status?: string | null
           name?: string
           owner_email?: string
