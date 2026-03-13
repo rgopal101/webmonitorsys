@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Globe, Lock, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function LoginPage() {
   const { signIn, session } = useAuth();
@@ -27,6 +28,22 @@ export default function LoginPage() {
     const { error } = await signIn(email, password);
     if (error) {
       setError(error.message);
+      setLoading(false);
+      return;
+    }
+    // Check role to redirect accordingly
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: roleData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (roleData?.role === "admin" || roleData?.role === "manager") {
+        navigate("/dashboard");
+      } else {
+        navigate("/my-dashboard");
+      }
     } else {
       navigate("/my-dashboard");
     }
