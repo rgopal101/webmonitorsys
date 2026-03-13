@@ -115,7 +115,7 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
                   <td style="padding:0 8px;"><a href="https://nextzensoftech.com/" style="color:#2563eb;font-size:12px;text-decoration:none;">nextzensoftech.com</a></td>
                 </tr>
               </table>
-              <p style="margin:16px 0 0;color:#cbd5e1;font-size:11px;">&copy; ${new Date().getFullYear()} Nextzen Softech. All rights reserved.</p>
+              <p style="margin:16px 0 0;color:#cbd5e1;font-size:11px;">&copy; ${new Date().getFullYear()} Isitonlineornot. All rights reserved.</p>
             </td>
           </tr>
 
