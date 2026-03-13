@@ -62,9 +62,9 @@ export default function SignupPage() {
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 border border-primary/20">
             <CheckCircle2 className="h-7 w-7 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Account Created!</h1>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Check Your Email</h1>
           <p className="text-muted-foreground mb-6">
-            A confirmation email has been sent to <strong className="text-foreground">{email}</strong>. You can now sign in to your account.
+            We've sent a verification link to <strong className="text-foreground">{email}</strong>. Please click the link in the email to verify your account before signing in.
           </p>
           <Link to="/login">
             <Button className="w-full">
