@@ -106,7 +106,7 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
           <!-- FOOTER -->
           <tr>
             <td style="background:#f1f5f9;padding:28px 32px;text-align:center;border-top:1px solid #e2e8f0;">
-              <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Nextzen Softech Monitoring System</p>
+              <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Isitonlineornot</p>
               <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;line-height:1.6;">You are receiving this alert because your website is being monitored.</p>
               <table role="presentation" cellpadding="0" cellspacing="0" style="margin:14px auto 0;">
                 <tr>
