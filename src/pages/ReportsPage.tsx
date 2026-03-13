@@ -49,6 +49,7 @@ export default function ReportsPage() {
 
   const { data: websites } = useQuery({
     queryKey: ["report-websites"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase.from("websites").select("*");
       return data ?? [];
