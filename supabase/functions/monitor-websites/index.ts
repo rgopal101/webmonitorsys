@@ -216,6 +216,8 @@ Deno.serve(async (req) => {
   for (const site of websites ?? []) {
     let status = "offline";
     let responseTimeMs: number | null = null;
+    let httpStatusCode: number | null = null;
+    let lastError: string | null = null;
 
     try {
       const controller = new AbortController();
@@ -231,10 +233,35 @@ Deno.serve(async (req) => {
       clearTimeout(timeout);
 
       responseTimeMs = Math.round(end - start);
-      status = res.ok ? "online" : "offline";
-    } catch {
+      httpStatusCode = res.status;
+
+      if (res.ok) {
+        status = "online";
+        lastError = null;
+      } else {
+        status = "offline";
+        lastError = `HTTP ${res.status} ${res.statusText}`;
+      }
+    } catch (err: unknown) {
       status = "offline";
       responseTimeMs = null;
+      httpStatusCode = null;
+
+      // Extract meaningful error reason
+      const errMsg = err instanceof Error ? err.message : String(err);
+      if (errMsg.includes("abort") || errMsg.includes("timeout")) {
+        lastError = "Connection timeout (15s)";
+      } else if (errMsg.includes("dns") || errMsg.includes("getaddrinfo") || errMsg.includes("NOTFOUND")) {
+        lastError = "DNS resolution failed";
+      } else if (errMsg.includes("ssl") || errMsg.includes("certificate") || errMsg.includes("CERT")) {
+        lastError = "SSL/TLS certificate error";
+      } else if (errMsg.includes("ECONNREFUSED") || errMsg.includes("refused")) {
+        lastError = "Connection refused";
+      } else if (errMsg.includes("ECONNRESET") || errMsg.includes("reset")) {
+        lastError = "Connection reset by server";
+      } else {
+        lastError = errMsg.length > 200 ? errMsg.slice(0, 200) : errMsg;
+      }
     }
 
     const previousStatus = site.last_notified_status ?? site.status;
@@ -244,6 +271,8 @@ Deno.serve(async (req) => {
       status,
       response_time_ms: responseTimeMs,
       last_checked_at: now,
+      http_status_code: httpStatusCode,
+      last_error: lastError,
     };
 
     // Only log and email on actual status change
@@ -253,11 +282,12 @@ Deno.serve(async (req) => {
       updateData.last_notified_status = status;
 
       const eventType = status === "online" ? "recovery" : "outage";
+      const errorDetail = lastError ? ` Reason: ${lastError}` : "";
       await supabase.from("activity_logs").insert({
         event_type: eventType,
         message: `${site.name} (${site.url}) went ${status}. ${
           responseTimeMs ? `Response time: ${responseTimeMs}ms` : "No response"
-        }`,
+        }${errorDetail}`,
         website_id: site.id,
       });
 
@@ -280,6 +310,8 @@ Deno.serve(async (req) => {
       url: site.url,
       status,
       response_time_ms: responseTimeMs,
+      http_status_code: httpStatusCode,
+      last_error: lastError,
     });
   }
 
