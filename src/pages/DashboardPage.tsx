@@ -29,6 +29,7 @@ const PIE_COLORS = [
 export default function DashboardPage() {
   const { data: profiles } = useQuery({
     queryKey: ["profiles-count"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data } = await supabase.from("profiles").select("*");
       return data ?? [];
