@@ -83,7 +83,11 @@ export default function LoginPage() {
           </Link>
           <h1 className="text-2xl font-bold text-foreground">Welcome Back</h1>
           <p className="mt-1 text-sm text-muted-foreground">Sign in to your monitoring dashboard</p>
-        </div>
+          {selectedPlan && PLAN_NAMES[selectedPlan] && (
+            <Badge variant="secondary" className="mt-3 px-3 py-1">
+              Selected plan: {PLAN_NAMES[selectedPlan]}
+            </Badge>
+          )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
