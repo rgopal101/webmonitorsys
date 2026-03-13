@@ -101,7 +101,7 @@ Deno.serve(async (req) => {
 
     // Generate email verification link using Supabase Admin API
     const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
-      type: "signup",
+      type: "magiclink",
       email,
       options: {
         redirectTo: `${APP_URL}/login?verified=true`,
