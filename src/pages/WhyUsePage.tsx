@@ -40,19 +40,9 @@ const reasons = [
     desc: "Track response times, uptime percentages, and historical data with easy-to-read charts and reports.",
   },
   {
-    icon: Shield,
-    title: "100% Free",
-    desc: "Our core website status checker is completely free to use. No hidden fees, no credit card required.",
-  },
-  {
     icon: Clock,
     title: "Historical Uptime Data",
     desc: "Access detailed logs showing when your site was up or down, helping you identify patterns and recurring issues.",
-  },
-  {
-    icon: CheckCircle2,
-    title: "No Signup Required",
-    desc: "Check any website's status instantly without creating an account. Sign up only when you want monitoring features.",
   },
 ];
 
