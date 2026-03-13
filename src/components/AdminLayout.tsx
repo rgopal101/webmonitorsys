@@ -10,13 +10,13 @@ import { cn } from "@/lib/utils";
 import { useAdminRealtimeSync } from "@/hooks/useAdminRealtimeSync";
 
 const navItems = [
-  { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/users", icon: Users, label: "Users" },
-  { to: "/websites", icon: Globe, label: "Websites" },
-  { to: "/subscriptions", icon: Crown, label: "Subscriptions" },
-  { to: "/activity-logs", icon: ScrollText, label: "Activity Logs" },
-  { to: "/reports", icon: BarChart3, label: "Reports" },
-  { to: "/settings", icon: Settings, label: "Settings" },
+  { to: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/admin/users", icon: Users, label: "Users" },
+  { to: "/admin/websites", icon: Globe, label: "Websites" },
+  { to: "/admin/subscriptions", icon: Crown, label: "Subscriptions" },
+  { to: "/admin/activity-logs", icon: ScrollText, label: "Activity Logs" },
+  { to: "/admin/reports", icon: BarChart3, label: "Reports" },
+  { to: "/admin/settings", icon: Settings, label: "Settings" },
 ];
 
 export default function AdminLayout() {
