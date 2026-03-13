@@ -167,8 +167,10 @@ async function sendAlert(smtpSettings: any, site: any, status: string, supabaseC
     ? `🔴 ALERT: ${site.name} is DOWN — Isitonlineornot`
     : `🟢 RECOVERY: ${site.name} is back ONLINE — Isitonlineornot`;
 
+  const logoUrl = supabaseClient ? await getLogoUrl(supabaseClient) : "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
+
   const html = buildEmailTemplate({
-    logoUrl: LOGO_URL,
+    logoUrl,
     alertColor,
     alertGradient,
     statusIcon,
