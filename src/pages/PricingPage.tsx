@@ -47,7 +47,6 @@ const plans = [
       "Unlimited notification emails",
       "Advanced analytics",
       "Full monitoring history",
-      "API access",
       "Priority support",
       "Custom check intervals",
     ],
