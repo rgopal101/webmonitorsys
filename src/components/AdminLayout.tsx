@@ -93,19 +93,28 @@ export default function AdminLayout() {
             <Menu className="h-5 w-5 text-foreground" />
           </button>
           <div className="flex-1" />
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold text-foreground">
-              {user?.email?.[0]?.toUpperCase() ?? "A"}
-            </div>
-            <div className="hidden sm:block min-w-0">
-              <p className="truncate text-sm font-medium text-foreground">{user?.email}</p>
-              <p className="text-xs text-muted-foreground capitalize">{userRole ?? "user"}</p>
-            </div>
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-destructive" onClick={handleSignOut}>
-              <LogOut className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Sign Out</span>
-            </Button>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted transition-colors">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+                  {user?.email?.[0]?.toUpperCase() ?? "A"}
+                </div>
+                <span className="hidden sm:block text-sm font-medium text-foreground">{user?.email}</span>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onClick={() => navigate("/admin/settings")} className="cursor-pointer">
+                <User className="mr-2 h-4 w-4" />
+                My Profile
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive focus:text-destructive">
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </header>
         <main className="flex-1 overflow-auto p-6">
           <Outlet />
