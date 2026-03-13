@@ -66,6 +66,7 @@ const App = () => (
               <Route path="/admin/activity-logs" element={<ActivityLogsPage />} />
               <Route path="/admin/reports" element={<ReportsPage />} />
               <Route path="/admin/settings" element={<SmtpSettingsPage />} />
+              <Route path="/admin/profile" element={<ProfilePage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
