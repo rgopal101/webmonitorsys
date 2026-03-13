@@ -3,11 +3,14 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   LayoutDashboard, Users, Globe, ScrollText, Settings, LogOut, Activity,
-  Menu, X, Crown, BarChart3, ChevronsLeft, ChevronsRight
+  Menu, X, Crown, BarChart3, ChevronsLeft, ChevronsRight, User, ChevronDown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAdminRealtimeSync } from "@/hooks/useAdminRealtimeSync";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 
 const navItems = [
   { to: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
