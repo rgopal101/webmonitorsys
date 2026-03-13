@@ -329,7 +329,7 @@ Deno.serve(async (req) => {
 
       // Send email alert only on status change
       try {
-        await sendAlert(smtpSettings, site, status);
+        await sendAlert(smtpSettings, site, status, supabase);
       } catch (emailErr) {
         console.error(`Failed to send email for ${site.name}:`, emailErr);
       }
