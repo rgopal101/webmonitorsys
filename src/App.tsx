@@ -14,6 +14,7 @@ import UsersPage from "@/pages/UsersPage";
 import WebsitesPage from "@/pages/WebsitesPage";
 import ActivityLogsPage from "@/pages/ActivityLogsPage";
 import SmtpSettingsPage from "@/pages/SmtpSettingsPage";
+import SubscriptionsPage from "@/pages/SubscriptionsPage";
 import PricingPage from "@/pages/PricingPage";
 import NotFound from "@/pages/NotFound";
 import LandingPage from "@/pages/LandingPage";
