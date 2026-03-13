@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Globe, Lock, Mail, User, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Globe, Lock, Mail, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function SignupPage() {
