@@ -40,7 +40,7 @@ export default function LoginPage() {
         .eq("user_id", user.id)
         .maybeSingle();
       if (roleData?.role === "admin" || roleData?.role === "manager") {
-        navigate("/dashboard");
+        navigate("/admin/dashboard");
       } else {
         navigate("/my-dashboard");
       }

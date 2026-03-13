@@ -56,7 +56,7 @@ export default function AdminLayout() {
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.to === "/dashboard"}
+              end={item.to === "/admin/dashboard"}
               onClick={() => setSidebarOpen(false)}
               className={({ isActive }) => cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
