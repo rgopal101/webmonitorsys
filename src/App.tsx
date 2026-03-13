@@ -19,6 +19,12 @@ import PricingPage from "@/pages/PricingPage";
 import ReportsPage from "@/pages/ReportsPage";
 import NotFound from "@/pages/NotFound";
 import LandingPage from "@/pages/LandingPage";
+import WhyUsePage from "@/pages/WhyUsePage";
+import HowItWorksPage from "@/pages/HowItWorksPage";
+import FaqPage from "@/pages/FaqPage";
+import ContactPage from "@/pages/ContactPage";
+import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
+import TermsOfServicePage from "@/pages/TermsOfServicePage";
 
 const queryClient = new QueryClient();
 
