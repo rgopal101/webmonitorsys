@@ -176,7 +176,7 @@ async function sendAlert(smtpSettings: any, site: any, status: string) {
   const recipients = site.owner_email.split(",").map((e: string) => e.trim()).filter(Boolean);
 
   await transporter.sendMail({
-    from: `"Nextzen Softech Monitor" <${smtpSettings.email}>`,
+    from: `"Isitonlineornot" <${smtpSettings.email}>`,
     to: recipients,
     subject,
     html,

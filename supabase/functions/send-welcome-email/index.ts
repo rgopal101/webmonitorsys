@@ -150,9 +150,9 @@ Deno.serve(async (req) => {
     });
 
     await transporter.sendMail({
-      from: `"Nextzen Softech Monitor" <${smtpSettings.email}>`,
+      from: `"Isitonlineornot" <${smtpSettings.email}>`,
       to: email,
-      subject: "✉️ Verify your email — Nextzen Softech Monitoring",
+      subject: "✉️ Verify your email — Isitonlineornot",
       html,
     });
 
