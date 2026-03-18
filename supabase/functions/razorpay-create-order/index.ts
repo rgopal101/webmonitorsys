@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         amount: planInfo.amount * 100, // Razorpay expects paise
         currency: "INR",
-        receipt: `${user_id}_${plan}_${Date.now()}`,
+        receipt: `rcpt_${Date.now()}`,
         notes: {
           user_id,
           plan,
