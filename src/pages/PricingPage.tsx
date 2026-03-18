@@ -388,7 +388,7 @@ export default function PricingPage() {
                     {loadingPlan === `${plan.key}-paypal` ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <>Pay {plan.priceUSD.replace('$', '')} USD</>
+                      <><svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797H9.603c-.564 0-1.04.408-1.13.964L7.076 21.337z"/></svg> Pay {plan.priceUSD.replace('$', '')} USD</>
                     )}
                   </button>
                   <button
@@ -399,7 +399,7 @@ export default function PricingPage() {
                     {loadingPlan === `${plan.key}-razorpay` ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <>Pay {plan.priceINR.replace('₹', '')} INR</>
+                      <><svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="currentColor"><path d="M22.436 0l-11.91 7.773-1.174 4.276 6.625-4.297L11.65 24h4.391L22.436 0zM14.26 0H10.16L3.564 24h4.25L14.26 0z"/></svg> Pay {plan.priceINR.replace('₹', '')} INR</>
                     )}
                   </button>
                 </div>
