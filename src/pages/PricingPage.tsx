@@ -379,25 +379,25 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="space-y-1.5">
+                <div className="flex gap-2">
                   <button
-                    className="w-full flex items-center gap-2 rounded-lg px-4 py-3 text-[15px] font-medium text-foreground bg-muted/50 hover:bg-primary/10 hover:text-primary transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                    className="flex-1 flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground bg-muted/50 hover:bg-primary/10 hover:text-primary transition-colors disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => handlePayPal(plan.key)}
                     disabled={loadingPlan !== null}
                   >
                     {loadingPlan === `${plan.key}-paypal` ? (
-                      <><Loader2 className="h-4 w-4 animate-spin" /> Processing...</>
+                      <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <>Pay {plan.priceUSD.replace('$', '')} USD</>
                     )}
                   </button>
                   <button
-                    className="w-full flex items-center gap-2 rounded-lg px-4 py-3 text-[15px] font-medium text-foreground bg-muted/50 hover:bg-primary/10 hover:text-primary transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                    className="flex-1 flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground bg-muted/50 hover:bg-primary/10 hover:text-primary transition-colors disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => handleRazorpay(plan.key)}
                     disabled={loadingPlan !== null}
                   >
                     {loadingPlan === `${plan.key}-razorpay` ? (
-                      <><Loader2 className="h-4 w-4 animate-spin" /> Processing...</>
+                      <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <>Pay {plan.priceINR.replace('₹', '')} INR</>
                     )}
