@@ -214,9 +214,39 @@ export default function PricingPage() {
             }
           },
           modal: {
-            ondismiss: () => {
-              setLoadingPlan(null);
-              toast.error("Payment was cancelled");
+            ondismiss: async () => {
+              // For UPI/QR scan payments, check if payment was completed
+              setLoadingPlan(`${planKey}-razorpay`);
+              toast.info("Checking payment status...");
+              let attempts = 0;
+              const maxAttempts = 10;
+              const pollInterval = 3000;
+              const checkPayment = async (): Promise<boolean> => {
+                try {
+                  const { data: checkData, error: checkError } = await supabase.functions.invoke("razorpay-check-payment", {
+                    body: { order_id: data.order_id, user_id: user.id },
+                  });
+                  if (checkError) return false;
+                  if (checkData?.status === "paid") {
+                    toast.success(`Subscription activated! Plan: ${checkData.plan}`);
+                    window.location.href = "/my-dashboard";
+                    return true;
+                  }
+                  return false;
+                } catch { return false; }
+              };
+              const paid = await checkPayment();
+              if (!paid) {
+                const poll = setInterval(async () => {
+                  attempts++;
+                  const success = await checkPayment();
+                  if (success || attempts >= maxAttempts) {
+                    clearInterval(poll);
+                    setLoadingPlan(null);
+                    if (!success) toast.error("Payment was cancelled or not completed");
+                  }
+                }, pollInterval);
+              }
             },
           },
         };
