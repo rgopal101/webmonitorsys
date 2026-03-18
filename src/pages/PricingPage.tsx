@@ -180,6 +180,64 @@ export default function PricingPage() {
       const script = document.createElement("script");
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
       script.onload = () => {
+        let pollingActive = true;
+        let pollStarted = false;
+        let paymentSettled = false;
+        let checkoutDismissed = false;
+
+        const stopPolling = () => {
+          pollingActive = false;
+        };
+
+        const checkPaymentStatus = async (): Promise<boolean> => {
+          try {
+            const { data: checkData, error: checkError } = await supabase.functions.invoke("razorpay-check-payment", {
+              body: { order_id: data.order_id, user_id: user.id },
+            });
+
+            if (checkError) return false;
+
+            if (checkData?.status === "paid") {
+              paymentSettled = true;
+              stopPolling();
+              toast.success(`Subscription activated! Plan: ${checkData.plan}`);
+              window.location.href = "/my-dashboard";
+              return true;
+            }
+
+            return false;
+          } catch {
+            return false;
+          }
+        };
+
+        const startPolling = () => {
+          if (pollStarted) return;
+          pollStarted = true;
+
+          const poll = async (attempt = 0) => {
+            if (!pollingActive || paymentSettled) return;
+
+            const success = await checkPaymentStatus();
+            if (success) return;
+
+            if (attempt >= 39) {
+              stopPolling();
+              if (checkoutDismissed) {
+                setLoadingPlan(null);
+                toast.error("Payment not confirmed yet. If money was debited, please wait a few seconds and refresh.");
+              }
+              return;
+            }
+
+            window.setTimeout(() => {
+              void poll(attempt + 1);
+            }, 3000);
+          };
+
+          void poll();
+        };
+
         const options = {
           key: data.key_id,
           amount: data.amount,
@@ -190,6 +248,8 @@ export default function PricingPage() {
           prefill: data.prefill,
           theme: { color: "#6366f1" },
           handler: async (response: any) => {
+            paymentSettled = true;
+            stopPolling();
             setLoadingPlan(`${planKey}-razorpay`);
             try {
               const { data: verifyData, error: verifyError } = await supabase.functions.invoke("razorpay-verify-payment", {
@@ -214,44 +274,19 @@ export default function PricingPage() {
             }
           },
           modal: {
-            ondismiss: async () => {
-              // For UPI/QR scan payments, check if payment was completed
-              setLoadingPlan(`${planKey}-razorpay`);
-              toast.info("Checking payment status...");
-              let attempts = 0;
-              const maxAttempts = 10;
-              const pollInterval = 3000;
-              const checkPayment = async (): Promise<boolean> => {
-                try {
-                  const { data: checkData, error: checkError } = await supabase.functions.invoke("razorpay-check-payment", {
-                    body: { order_id: data.order_id, user_id: user.id },
-                  });
-                  if (checkError) return false;
-                  if (checkData?.status === "paid") {
-                    toast.success(`Subscription activated! Plan: ${checkData.plan}`);
-                    window.location.href = "/my-dashboard";
-                    return true;
-                  }
-                  return false;
-                } catch { return false; }
-              };
-              const paid = await checkPayment();
-              if (!paid) {
-                const poll = setInterval(async () => {
-                  attempts++;
-                  const success = await checkPayment();
-                  if (success || attempts >= maxAttempts) {
-                    clearInterval(poll);
-                    setLoadingPlan(null);
-                    if (!success) toast.error("Payment was cancelled or not completed");
-                  }
-                }, pollInterval);
+            ondismiss: () => {
+              checkoutDismissed = true;
+              if (!paymentSettled) {
+                setLoadingPlan(`${planKey}-razorpay`);
+                toast.info("Checking payment status...");
               }
             },
           },
         };
+
         const rzp = new (window as any).Razorpay(options);
         rzp.open();
+        startPolling();
         setLoadingPlan(null);
       };
       script.onerror = () => {
