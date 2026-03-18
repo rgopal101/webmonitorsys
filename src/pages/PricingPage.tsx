@@ -379,31 +379,29 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="space-y-2">
-                  <Button
-                    className="w-full"
-                    variant={plan.popular ? "default" : "outline"}
+                <div className="space-y-1.5">
+                  <button
+                    className="w-full flex items-center gap-2 rounded-lg px-4 py-3 text-[15px] font-medium text-foreground bg-muted/50 hover:bg-primary/10 hover:text-primary transition-colors disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => handlePayPal(plan.key)}
                     disabled={loadingPlan !== null}
                   >
                     {loadingPlan === `${plan.key}-paypal` ? (
-                      <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Processing...</>
+                      <><Loader2 className="h-4 w-4 animate-spin" /> Processing...</>
                     ) : (
-                      <><DollarSign className="mr-1 h-4 w-4" /> Pay with PayPal (USD)</>
+                      <>Pay {plan.priceUSD.replace('$', '')} USD</>
                     )}
-                  </Button>
-                  <Button
-                    className="w-full"
-                    variant="outline"
+                  </button>
+                  <button
+                    className="w-full flex items-center gap-2 rounded-lg px-4 py-3 text-[15px] font-medium text-foreground bg-muted/50 hover:bg-primary/10 hover:text-primary transition-colors disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => handleRazorpay(plan.key)}
                     disabled={loadingPlan !== null}
                   >
                     {loadingPlan === `${plan.key}-razorpay` ? (
-                      <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Processing...</>
+                      <><Loader2 className="h-4 w-4 animate-spin" /> Processing...</>
                     ) : (
-                      <><IndianRupee className="mr-1 h-4 w-4" /> Pay with Razorpay (INR)</>
+                      <>Pay {plan.priceINR.replace('₹', '')} INR</>
                     )}
-                  </Button>
+                  </button>
                 </div>
               </motion.div>
             ))}
