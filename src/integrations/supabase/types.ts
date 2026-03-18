@@ -46,6 +46,51 @@ export type Database = {
           },
         ]
       }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          metadata: Json | null
+          order_id: string | null
+          payment_method: string
+          plan: string | null
+          status: string
+          transaction_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          metadata?: Json | null
+          order_id?: string | null
+          payment_method: string
+          plan?: string | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          metadata?: Json | null
+          order_id?: string | null
+          payment_method?: string
+          plan?: string | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       paypal_settings: {
         Row: {
           client_id: string
@@ -100,6 +145,33 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      razorpay_settings: {
+        Row: {
+          created_at: string
+          id: string
+          key_id: string
+          key_secret: string
+          mode: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key_id?: string
+          key_secret?: string
+          mode?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key_id?: string
+          key_secret?: string
+          mode?: string
+          updated_at?: string
         }
         Relationships: []
       }
