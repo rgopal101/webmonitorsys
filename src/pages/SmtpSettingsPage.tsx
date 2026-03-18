@@ -401,6 +401,85 @@ function PayPalTab() {
   );
 }
 
+// ─── Razorpay Tab ───
+function RazorpayTab() {
+  const queryClient = useQueryClient();
+  const [showSecret, setShowSecret] = useState(false);
+
+  const { data: settings } = useQuery({
+    queryKey: ["razorpay-settings"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("razorpay_settings").select("*").maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const [form, setForm] = useState({ key_id: "", key_secret: "", mode: "test" });
+  const [initialized, setInitialized] = useState(false);
+  if (settings && !initialized) {
+    setForm({ key_id: settings.key_id, key_secret: settings.key_secret, mode: settings.mode });
+    setInitialized(true);
+  }
+
+  const saveSettings = useMutation({
+    mutationFn: async () => {
+      if (settings) {
+        const { error } = await supabase.from("razorpay_settings").update(form).eq("id", settings.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("razorpay_settings").insert(form);
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["razorpay-settings"] }); toast.success("Razorpay settings saved"); },
+    onError: (e) => toast.error(e.message),
+  });
+
+  return (
+    <div className="max-w-lg rounded-xl border border-border bg-card p-6">
+      <div className="mb-6 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+          <IndianRupee className="h-5 w-5 text-primary" />
+        </div>
+        <div>
+          <p className="font-semibold text-foreground">Razorpay Integration</p>
+          <p className="text-xs text-muted-foreground">Configure Razorpay API credentials for INR payment processing</p>
+        </div>
+      </div>
+      <form onSubmit={(e) => { e.preventDefault(); saveSettings.mutate(); }} className="space-y-4">
+        <div className="space-y-2">
+          <Label className="text-muted-foreground">Razorpay Key ID</Label>
+          <Input value={form.key_id} onChange={(e) => setForm(f => ({ ...f, key_id: e.target.value }))} placeholder="rzp_test_xxxxxxxxxxxx" className="bg-background border-border" />
+        </div>
+        <div className="space-y-2">
+          <Label className="text-muted-foreground">Razorpay Key Secret</Label>
+          <div className="relative">
+            <Input type={showSecret ? "text" : "password"} value={form.key_secret} onChange={(e) => setForm(f => ({ ...f, key_secret: e.target.value }))} placeholder="Enter your Razorpay Key Secret" className="bg-background border-border pr-10" />
+            <button type="button" onClick={() => setShowSecret(!showSecret)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              {showSecret ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label className="text-muted-foreground">Environment</Label>
+          <Select value={form.mode} onValueChange={(v) => setForm(f => ({ ...f, mode: v }))}>
+            <SelectTrigger className="bg-background border-border"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="test">Test Mode</SelectItem>
+              <SelectItem value="live">Live (Production)</SelectItem>
+            </SelectContent>
+          </Select>
+          <p className="text-xs text-muted-foreground">
+            {form.mode === "test" ? "Use test mode for development. No real payments." : "⚠️ Live mode will process real payments."}
+          </p>
+        </div>
+        <Button type="submit" disabled={saveSettings.isPending}>{saveSettings.isPending ? "Saving..." : "Save Settings"}</Button>
+      </form>
+    </div>
+  );
+}
+
 // ─── Custom Scripts Tab ───
 function CustomScriptsTab() {
   const keys = ["script_head", "script_body", "script_footer"];
