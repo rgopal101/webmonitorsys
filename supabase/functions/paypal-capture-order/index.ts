@@ -112,6 +112,20 @@ Deno.serve(async (req) => {
 
     if (updateError) throw updateError;
 
+    // Store payment record
+    const captureAmount = captureData.purchase_units?.[0]?.payments?.captures?.[0]?.amount;
+    await supabase.from("payments").insert({
+      user_id: userId,
+      amount: parseFloat(captureAmount?.value || "0"),
+      currency: captureAmount?.currency_code || "USD",
+      payment_method: "paypal",
+      transaction_id: captureData.purchase_units?.[0]?.payments?.captures?.[0]?.id || order_id,
+      order_id: order_id,
+      status: "completed",
+      plan,
+      metadata: { paypal_status: captureData.status },
+    });
+
     await supabase
       .from("websites")
       .update({ tracking_enabled: true })

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Globe, ArrowRight, Zap, Loader2 } from "lucide-react";
+import { CheckCircle2, Globe, ArrowRight, Zap, Loader2, IndianRupee, DollarSign } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -14,7 +14,8 @@ const plans = [
   {
     name: "Starter",
     key: "starter",
-    price: "$1",
+    priceUSD: "$1",
+    priceINR: "₹99",
     period: "/month",
     description: "Perfect for personal projects and small websites.",
     features: [
@@ -29,7 +30,8 @@ const plans = [
   {
     name: "Professional",
     key: "professional",
-    price: "$5",
+    priceUSD: "$5",
+    priceINR: "₹499",
     period: "/month",
     description: "For growing businesses that need detailed insights.",
     features: [
@@ -45,7 +47,8 @@ const plans = [
   {
     name: "Unlimited",
     key: "unlimited",
-    price: "$15",
+    priceUSD: "$15",
+    priceINR: "₹1,499",
     period: "/month",
     description: "For teams and agencies managing many websites.",
     features: [
@@ -73,11 +76,11 @@ export default function PricingPage() {
   const [searchParams] = useSearchParams();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
-  // Handle PayPal return or auto-pay after login
   useEffect(() => {
     const token = searchParams.get("token");
     const paymentStatus = searchParams.get("payment");
     const autoPay = searchParams.get("auto_pay");
+    const autoMethod = searchParams.get("method") || "paypal";
 
     if (paymentStatus === "cancelled") {
       toast.error("Payment was cancelled");
@@ -88,11 +91,13 @@ export default function PricingPage() {
       capturePayPalOrder(token);
     }
 
-    // Auto-trigger PayPal after login redirect
     if (autoPay && user && plans.find(p => p.key === autoPay)) {
-      // Clean URL and trigger payment
       window.history.replaceState({}, "", "/pricing");
-      handlePayPal(autoPay);
+      if (autoMethod === "razorpay") {
+        handleRazorpay(autoPay);
+      } else {
+        handlePayPal(autoPay);
+      }
     }
   }, [searchParams, user]);
 
@@ -118,12 +123,11 @@ export default function PricingPage() {
 
   const handlePayPal = async (planKey: string) => {
     if (!user) {
-      // Redirect to login with selected plan
-      window.location.href = `/login?plan=${planKey}`;
+      window.location.href = `/login?plan=${planKey}&method=paypal`;
       return;
     }
 
-    setLoadingPlan(planKey);
+    setLoadingPlan(`${planKey}-paypal`);
     try {
       const { data, error } = await supabase.functions.invoke("paypal-create-order", {
         body: {
@@ -147,6 +151,90 @@ export default function PricingPage() {
     }
   };
 
+  const handleRazorpay = async (planKey: string) => {
+    if (!user) {
+      window.location.href = `/login?plan=${planKey}&method=razorpay`;
+      return;
+    }
+
+    setLoadingPlan(`${planKey}-razorpay`);
+    try {
+      const { data, error } = await supabase.functions.invoke("razorpay-create-order", {
+        body: {
+          plan: planKey,
+          user_id: user.id,
+          customer_name: user.user_metadata?.full_name || "",
+          customer_email: user.email || "",
+          customer_contact: "",
+        },
+      });
+      if (error) throw error;
+
+      if (!data?.order_id || !data?.key_id) {
+        toast.error("Could not create Razorpay order");
+        setLoadingPlan(null);
+        return;
+      }
+
+      // Load Razorpay script
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => {
+        const options = {
+          key: data.key_id,
+          amount: data.amount,
+          currency: data.currency,
+          name: "IsItOnlineOrNot.com",
+          description: data.plan_name,
+          order_id: data.order_id,
+          prefill: data.prefill,
+          theme: { color: "#6366f1" },
+          handler: async (response: any) => {
+            setLoadingPlan(`${planKey}-razorpay`);
+            try {
+              const { data: verifyData, error: verifyError } = await supabase.functions.invoke("razorpay-verify-payment", {
+                body: {
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  user_id: user.id,
+                },
+              });
+              if (verifyError) throw verifyError;
+              if (verifyData?.success) {
+                toast.success(`Subscription activated! Plan: ${verifyData.plan}`);
+                window.location.href = "/my-dashboard";
+              } else {
+                toast.error(verifyData?.error || "Payment verification failed");
+              }
+            } catch (e: any) {
+              toast.error(e.message || "Verification failed");
+            } finally {
+              setLoadingPlan(null);
+            }
+          },
+          modal: {
+            ondismiss: () => {
+              setLoadingPlan(null);
+              toast.error("Payment was cancelled");
+            },
+          },
+        };
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+        setLoadingPlan(null);
+      };
+      script.onerror = () => {
+        toast.error("Failed to load Razorpay. Please try again.");
+        setLoadingPlan(null);
+      };
+      document.body.appendChild(script);
+    } catch (e: any) {
+      toast.error(e.message || "Razorpay error");
+      setLoadingPlan(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
@@ -162,7 +250,7 @@ export default function PricingPage() {
               Choose Your Monitoring Plan
             </h1>
             <p className="mx-auto max-w-xl text-lg text-muted-foreground">
-              Start free, upgrade when you need more. All plans include real-time alerts and uptime monitoring.
+              Start free, upgrade when you need more. Pay in USD via PayPal or INR via Razorpay.
             </p>
           </motion.div>
         </div>
@@ -211,9 +299,12 @@ export default function PricingPage() {
                 )}
                 <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
                 <p className="text-sm text-muted-foreground mb-4">{plan.description}</p>
-                <div className="mb-6">
-                  <span className="text-4xl font-extrabold">{plan.price}</span>
-                  <span className="text-muted-foreground">{plan.period}</span>
+                <div className="mb-2">
+                  <span className="text-4xl font-extrabold">{plan.priceUSD}</span>
+                  <span className="text-muted-foreground"> USD{plan.period}</span>
+                </div>
+                <div className="mb-6 text-sm text-muted-foreground">
+                  or <span className="font-semibold text-foreground">{plan.priceINR}</span> INR{plan.period}
                 </div>
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((f) => (
@@ -223,18 +314,32 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <Button
-                  className="w-full"
-                  variant={plan.popular ? "default" : "outline"}
-                  onClick={() => handlePayPal(plan.key)}
-                  disabled={loadingPlan !== null}
-                >
-                  {loadingPlan === plan.key ? (
-                    <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Processing...</>
-                  ) : (
-                    <>Pay with PayPal <ArrowRight className="ml-1 h-4 w-4" /></>
-                  )}
-                </Button>
+                <div className="space-y-2">
+                  <Button
+                    className="w-full"
+                    variant={plan.popular ? "default" : "outline"}
+                    onClick={() => handlePayPal(plan.key)}
+                    disabled={loadingPlan !== null}
+                  >
+                    {loadingPlan === `${plan.key}-paypal` ? (
+                      <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Processing...</>
+                    ) : (
+                      <><DollarSign className="mr-1 h-4 w-4" /> Pay with PayPal (USD)</>
+                    )}
+                  </Button>
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    onClick={() => handleRazorpay(plan.key)}
+                    disabled={loadingPlan !== null}
+                  >
+                    {loadingPlan === `${plan.key}-razorpay` ? (
+                      <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Processing...</>
+                    ) : (
+                      <><IndianRupee className="mr-1 h-4 w-4" /> Pay with Razorpay (INR)</>
+                    )}
+                  </Button>
+                </div>
               </motion.div>
             ))}
           </div>
