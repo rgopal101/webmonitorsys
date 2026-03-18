@@ -571,6 +571,9 @@ export default function SmtpSettingsPage() {
           <TabsTrigger value="paypal" className="gap-2">
             <CreditCard className="h-4 w-4" /> PayPal
           </TabsTrigger>
+          <TabsTrigger value="razorpay" className="gap-2">
+            <IndianRupee className="h-4 w-4" /> Razorpay
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="seo" className="mt-6"><SeoTab /></TabsContent>
         <TabsContent value="homepage" className="mt-6"><HomePageTab /></TabsContent>
@@ -578,6 +581,7 @@ export default function SmtpSettingsPage() {
         <TabsContent value="scripts" className="mt-6"><CustomScriptsTab /></TabsContent>
         <TabsContent value="smtp" className="mt-6"><SmtpTab /></TabsContent>
         <TabsContent value="paypal" className="mt-6"><PayPalTab /></TabsContent>
+        <TabsContent value="razorpay" className="mt-6"><RazorpayTab /></TabsContent>
       </Tabs>
     </div>
   );
