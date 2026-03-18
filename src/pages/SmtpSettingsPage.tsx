@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Mail, Send, CreditCard, Eye, EyeOff, Search, Home, Image, Upload, Code } from "lucide-react";
+import { Mail, Send, CreditCard, Eye, EyeOff, Search, Home, Image, Upload, Code, IndianRupee } from "lucide-react";
 import { useSiteSettings as useSiteSettingsHook } from "@/hooks/useSiteSettings";
 
 // Helper hook to fetch and save site settings
