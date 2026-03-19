@@ -46,6 +46,78 @@ export type Database = {
           },
         ]
       }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          metadata: Json | null
+          order_id: string | null
+          payment_method: string
+          plan: string | null
+          status: string
+          transaction_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          metadata?: Json | null
+          order_id?: string | null
+          payment_method: string
+          plan?: string | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          metadata?: Json | null
+          order_id?: string | null
+          payment_method?: string
+          plan?: string | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      paypal_settings: {
+        Row: {
+          client_id: string
+          client_secret: string
+          created_at: string
+          id: string
+          mode: string
+          updated_at: string
+        }
+        Insert: {
+          client_id?: string
+          client_secret?: string
+          created_at?: string
+          id?: string
+          mode?: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          client_secret?: string
+          created_at?: string
+          id?: string
+          mode?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -73,6 +145,57 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      razorpay_settings: {
+        Row: {
+          created_at: string
+          id: string
+          key_id: string
+          key_secret: string
+          mode: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key_id?: string
+          key_secret?: string
+          mode?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key_id?: string
+          key_secret?: string
+          mode?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          created_at: string
+          id: string
+          setting_key: string
+          setting_value: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          setting_key: string
+          setting_value?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          setting_key?: string
+          setting_value?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -127,11 +250,64 @@ export type Database = {
         }
         Relationships: []
       }
+      user_subscriptions: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          max_domains: number
+          max_emails: number
+          payment_provider: string | null
+          paypal_subscription_id: string | null
+          plan: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          max_domains?: number
+          max_emails?: number
+          payment_provider?: string | null
+          paypal_subscription_id?: string | null
+          plan?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          max_domains?: number
+          max_emails?: number
+          payment_provider?: string | null
+          paypal_subscription_id?: string | null
+          plan?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       websites: {
         Row: {
           created_at: string
+          http_status_code: number | null
           id: string
           last_checked_at: string | null
+          last_error: string | null
           last_notified_status: string | null
           name: string
           owner_email: string
@@ -140,11 +316,14 @@ export type Database = {
           tracking_enabled: boolean
           updated_at: string
           url: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
+          http_status_code?: number | null
           id?: string
           last_checked_at?: string | null
+          last_error?: string | null
           last_notified_status?: string | null
           name: string
           owner_email: string
@@ -153,11 +332,14 @@ export type Database = {
           tracking_enabled?: boolean
           updated_at?: string
           url: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
+          http_status_code?: number | null
           id?: string
           last_checked_at?: string | null
+          last_error?: string | null
           last_notified_status?: string | null
           name?: string
           owner_email?: string
@@ -166,6 +348,7 @@ export type Database = {
           tracking_enabled?: boolean
           updated_at?: string
           url?: string
+          user_id?: string | null
         }
         Relationships: []
       }

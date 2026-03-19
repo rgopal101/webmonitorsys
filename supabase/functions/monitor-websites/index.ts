@@ -7,7 +7,14 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-const LOGO_URL = "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
+async function getLogoUrl(supabase: any): Promise<string> {
+  const { data } = await supabase
+    .from("site_settings")
+    .select("setting_value")
+    .eq("setting_key", "logo_url")
+    .maybeSingle();
+  return data?.setting_value || "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
+}
 
 interface EmailTemplateOptions {
   logoUrl: string;
@@ -28,7 +35,7 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nextzen Softech Monitoring</title>
+  <title>Isitonlineornot</title>
 </head>
 <body style="margin:0;padding:0;background-color:#f0f4f8;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;-webkit-font-smoothing:antialiased;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f4f8;padding:40px 16px;">
@@ -39,7 +46,7 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
           <!-- LOGO HEADER (white background) -->
           <tr>
             <td style="background:#ffffff;padding:28px 32px 20px;text-align:center;border-bottom:1px solid #e8edf2;">
-              <img src="${opts.logoUrl}" alt="Nextzen Softech" height="50" style="height:50px;max-height:60px;width:auto;display:inline-block;" />
+              <img src="${opts.logoUrl}" alt="Isitonlineornot" height="50" style="height:50px;max-height:60px;width:auto;display:inline-block;" />
               <p style="margin:10px 0 0;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">Website Monitoring System</p>
             </td>
           </tr>
@@ -106,16 +113,16 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
           <!-- FOOTER -->
           <tr>
             <td style="background:#f1f5f9;padding:28px 32px;text-align:center;border-top:1px solid #e2e8f0;">
-              <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Nextzen Softech Monitoring System</p>
+              <p style="margin:0;color:#334155;font-size:14px;font-weight:700;">Isitonlineornot</p>
               <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;line-height:1.6;">You are receiving this alert because your website is being monitored.</p>
               <table role="presentation" cellpadding="0" cellspacing="0" style="margin:14px auto 0;">
                 <tr>
-                  <td style="padding:0 8px;"><a href="mailto:info@nextzensoftech.com" style="color:#2563eb;font-size:12px;text-decoration:none;">info@nextzensoftech.com</a></td>
+                  <td style="padding:0 8px;"><a href="mailto:info@isitonlineornot.com" style="color:#2563eb;font-size:12px;text-decoration:none;">info@isitonlineornot.com</a></td>
                   <td style="color:#cbd5e1;font-size:12px;">|</td>
-                  <td style="padding:0 8px;"><a href="https://nextzensoftech.com/" style="color:#2563eb;font-size:12px;text-decoration:none;">nextzensoftech.com</a></td>
+                  <td style="padding:0 8px;"><a href="https://isitonlineornot.com/" style="color:#2563eb;font-size:12px;text-decoration:none;">isitonlineornot.com</a></td>
                 </tr>
               </table>
-              <p style="margin:16px 0 0;color:#cbd5e1;font-size:11px;">&copy; ${new Date().getFullYear()} Nextzen Softech. All rights reserved.</p>
+              <p style="margin:16px 0 0;color:#cbd5e1;font-size:11px;">&copy; ${new Date().getFullYear()} Isitonlineornot. All rights reserved.</p>
             </td>
           </tr>
 
@@ -127,7 +134,7 @@ function buildEmailTemplate(opts: EmailTemplateOptions): string {
 </html>`;
 }
 
-async function sendAlert(smtpSettings: any, site: any, status: string) {
+async function sendAlert(smtpSettings: any, site: any, status: string, supabaseClient?: any) {
   if (!smtpSettings) return;
 
   const isSSL = smtpSettings.encryption === "ssl" || smtpSettings.port === 465;
@@ -157,11 +164,13 @@ async function sendAlert(smtpSettings: any, site: any, status: string) {
     : "Great news! The following website has recovered and is back online.";
 
   const subject = isDown
-    ? `🔴 ALERT: ${site.name} is DOWN — Nextzen Softech Monitoring`
-    : `🟢 RECOVERY: ${site.name} is back ONLINE — Nextzen Softech Monitoring`;
+    ? `🔴 ALERT: ${site.name} is DOWN — Isitonlineornot`
+    : `🟢 RECOVERY: ${site.name} is back ONLINE — Isitonlineornot`;
+
+  const logoUrl = supabaseClient ? await getLogoUrl(supabaseClient) : "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
 
   const html = buildEmailTemplate({
-    logoUrl: LOGO_URL,
+    logoUrl,
     alertColor,
     alertGradient,
     statusIcon,
@@ -176,7 +185,7 @@ async function sendAlert(smtpSettings: any, site: any, status: string) {
   const recipients = site.owner_email.split(",").map((e: string) => e.trim()).filter(Boolean);
 
   await transporter.sendMail({
-    from: `"Nextzen Softech Monitor" <${smtpSettings.email}>`,
+    from: `"Isitonlineornot" <${smtpSettings.email}>`,
     to: recipients,
     subject,
     html,
@@ -216,25 +225,78 @@ Deno.serve(async (req) => {
   for (const site of websites ?? []) {
     let status = "offline";
     let responseTimeMs: number | null = null;
+    let httpStatusCode: number | null = null;
+    let lastError: string | null = null;
 
     try {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 15000);
+      const fetchHeaders = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+      };
 
       const start = performance.now();
-      const res = await fetch(site.url, {
+      let res = await fetch(site.url, {
         method: "HEAD",
         signal: controller.signal,
         redirect: "follow",
+        headers: fetchHeaders,
       });
+
+      // Cloudflare blocks HEAD requests — retry with GET
+      if (res.status === 403) {
+        res = await fetch(site.url, {
+          method: "GET",
+          signal: controller.signal,
+          redirect: "follow",
+          headers: fetchHeaders,
+        });
+      }
+
       const end = performance.now();
       clearTimeout(timeout);
 
       responseTimeMs = Math.round(end - start);
-      status = res.ok ? "online" : "offline";
-    } catch {
+      httpStatusCode = res.status;
+
+      if (res.ok) {
+        status = "online";
+        lastError = null;
+      } else {
+        status = "offline";
+        if (res.status === 403) {
+          const body = await res.text();
+          if (body.includes("cloudflare") || body.includes("Cloudflare") || body.includes("cf-")) {
+            lastError = "Blocked by Cloudflare WAF — site owner must whitelist monitoring IPs";
+          } else {
+            lastError = `HTTP 403 Forbidden`;
+          }
+        } else {
+          lastError = `HTTP ${res.status} ${res.statusText}`;
+        }
+      }
+    } catch (err: unknown) {
       status = "offline";
       responseTimeMs = null;
+      httpStatusCode = null;
+
+      // Extract meaningful error reason
+      const errMsg = err instanceof Error ? err.message : String(err);
+      if (errMsg.includes("abort") || errMsg.includes("timeout")) {
+        lastError = "Connection timeout (15s)";
+      } else if (errMsg.includes("dns") || errMsg.includes("getaddrinfo") || errMsg.includes("NOTFOUND")) {
+        lastError = "DNS resolution failed";
+      } else if (errMsg.includes("ssl") || errMsg.includes("certificate") || errMsg.includes("CERT")) {
+        lastError = "SSL/TLS certificate error";
+      } else if (errMsg.includes("ECONNREFUSED") || errMsg.includes("refused")) {
+        lastError = "Connection refused";
+      } else if (errMsg.includes("ECONNRESET") || errMsg.includes("reset")) {
+        lastError = "Connection reset by server";
+      } else {
+        lastError = errMsg.length > 200 ? errMsg.slice(0, 200) : errMsg;
+      }
     }
 
     const previousStatus = site.last_notified_status ?? site.status;
@@ -244,11 +306,15 @@ Deno.serve(async (req) => {
       status,
       response_time_ms: responseTimeMs,
       last_checked_at: now,
+      http_status_code: httpStatusCode,
+      last_error: lastError,
     };
 
-    // Only log and email on actual status change
+    // Log every check so Activity Logs always shows fresh monitoring data.
+    // Keep email alerts only for real status transitions.
     const statusChanged = previousStatus !== status;
-    
+    const reasonDetail = lastError ? ` Reason: ${lastError}` : "";
+
     if (statusChanged) {
       updateData.last_notified_status = status;
 
@@ -257,16 +323,25 @@ Deno.serve(async (req) => {
         event_type: eventType,
         message: `${site.name} (${site.url}) went ${status}. ${
           responseTimeMs ? `Response time: ${responseTimeMs}ms` : "No response"
-        }`,
+        }${reasonDetail}`,
         website_id: site.id,
       });
 
       // Send email alert only on status change
       try {
-        await sendAlert(smtpSettings, site, status);
+        await sendAlert(smtpSettings, site, status, supabase);
       } catch (emailErr) {
         console.error(`Failed to send email for ${site.name}:`, emailErr);
       }
+    } else {
+      const heartbeatEvent = status === "online" ? "online" : "offline";
+      await supabase.from("activity_logs").insert({
+        event_type: heartbeatEvent,
+        message: `${site.name} (${site.url}) check: ${status}. ${
+          responseTimeMs ? `Response time: ${responseTimeMs}ms` : "No response"
+        }${reasonDetail}`,
+        website_id: site.id,
+      });
     }
 
     await supabase
@@ -280,6 +355,8 @@ Deno.serve(async (req) => {
       url: site.url,
       status,
       response_time_ms: responseTimeMs,
+      http_status_code: httpStatusCode,
+      last_error: lastError,
     });
   }
 

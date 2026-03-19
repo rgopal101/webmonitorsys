@@ -1,8 +1,10 @@
 import { useState } from "react";
+import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import Footer from "@/components/Footer";
 import {
   Globe,
   Search,
@@ -30,6 +32,7 @@ import {
 } from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 type CheckResult = {
   status: "online" | "offline" | "slow" | null;
@@ -71,6 +74,7 @@ const faqs = [
 ];
 
 export default function LandingPage() {
+  const { session } = useAuth();
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CheckResult>(null);
@@ -99,26 +103,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Globe className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-bold tracking-tight">isitonlineornot<span className="text-primary">.com</span></span>
-          </div>
-          <div className="hidden items-center gap-6 text-sm md:flex">
-            <a href="#features" className="text-muted-foreground transition hover:text-foreground">Features</a>
-            <a href="#how-it-works" className="text-muted-foreground transition hover:text-foreground">How It Works</a>
-            <a href="#monitoring" className="text-muted-foreground transition hover:text-foreground">Monitoring</a>
-            <a href="#faq" className="text-muted-foreground transition hover:text-foreground">FAQ</a>
-          </div>
-          <Link to="/login">
-            <Button size="sm" variant="outline">Admin Login</Button>
-          </Link>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero */}
       <section className="relative overflow-hidden pb-20 pt-20 md:pt-32">
@@ -257,9 +242,9 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link to="/login">
+              <Link to="/signup">
                 <Button size="lg" className="rounded-xl px-8 text-base font-semibold">
-                  Start Monitoring <ArrowRight className="ml-1 h-4 w-4" />
+                  Start Monitoring Free <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
               </Link>
             </div>
@@ -320,44 +305,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border bg-card py-14">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="grid gap-10 md:grid-cols-4">
-            <div className="md:col-span-2">
-              <div className="mb-4 flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                  <Globe className="h-4 w-4 text-primary-foreground" />
-                </div>
-                <span className="text-lg font-bold">isitonlineornot<span className="text-primary">.com</span></span>
-              </div>
-              <p className="max-w-sm text-sm text-muted-foreground leading-relaxed">
-                Free website monitoring and status checking tool. Check if any website is online or down instantly.
-              </p>
-            </div>
-            <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Product</h4>
-              <ul className="space-y-2.5 text-sm">
-                <li><a href="#" className="text-muted-foreground transition hover:text-foreground">Website Status Checker</a></li>
-                <li><a href="#monitoring" className="text-muted-foreground transition hover:text-foreground">Website Monitoring</a></li>
-                <li><a href="#features" className="text-muted-foreground transition hover:text-foreground">Features</a></li>
-                <li><a href="#faq" className="text-muted-foreground transition hover:text-foreground">FAQ</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Legal</h4>
-              <ul className="space-y-2.5 text-sm">
-                <li><a href="#" className="text-muted-foreground transition hover:text-foreground">Privacy Policy</a></li>
-                <li><a href="#" className="text-muted-foreground transition hover:text-foreground">Terms of Service</a></li>
-                <li><a href="#" className="text-muted-foreground transition hover:text-foreground">Contact</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-10 border-t border-border pt-8 text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} isitonlineornot.com — Website Monitoring Tool
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

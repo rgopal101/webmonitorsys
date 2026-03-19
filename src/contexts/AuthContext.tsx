@@ -7,6 +7,7 @@ type AuthContextType = {
   session: Session | null;
   user: User | null;
   userRole: string | null;
+  userName: string | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -18,6 +19,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchRole = async (userId: string) => {
@@ -29,14 +31,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUserRole(data?.role ?? null);
   };
 
+  const fetchProfile = async (userId: string) => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("full_name")
+      .eq("user_id", userId)
+      .maybeSingle();
+    setUserName(data?.full_name || null);
+  };
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
         setTimeout(() => fetchRole(session.user.id), 0);
+        setTimeout(() => fetchProfile(session.user.id), 0);
       } else {
         setUserRole(null);
+        setUserName(null);
       }
       setLoading(false);
     });
@@ -46,6 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchRole(session.user.id);
+        fetchProfile(session.user.id);
       }
       setLoading(false);
     });
@@ -63,7 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ session, user, userRole, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ session, user, userRole, userName, loading, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

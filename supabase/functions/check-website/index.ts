@@ -25,28 +25,83 @@ serve(async (req) => {
     }
 
     const start = Date.now();
+    const fetchHeaders = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+      };
+
     try {
-      const response = await fetch(targetUrl, {
+      let response = await fetch(targetUrl, {
         method: "HEAD",
         signal: AbortSignal.timeout(10000),
         redirect: "follow",
+        headers: fetchHeaders,
       });
+
+      // Cloudflare blocks HEAD requests — retry with GET
+      if (response.status === 403) {
+        response = await fetch(targetUrl, {
+          method: "GET",
+          signal: AbortSignal.timeout(10000),
+          redirect: "follow",
+          headers: fetchHeaders,
+        });
+      }
+
       const responseTime = Date.now() - start;
 
       let status: "online" | "offline" | "slow" = "online";
-      if (!response.ok && response.status >= 500) {
+      let lastError: string | null = null;
+
+      if (!response.ok) {
         status = "offline";
+        // Detect Cloudflare WAF block
+        if (response.status === 403) {
+          const body = await response.text();
+          if (body.includes("cloudflare") || body.includes("Cloudflare") || body.includes("cf-")) {
+            lastError = "Blocked by Cloudflare WAF — site owner must whitelist monitoring IPs";
+          } else {
+            lastError = `HTTP 403 Forbidden`;
+          }
+        } else {
+          lastError = `HTTP ${response.status} ${response.statusText}`;
+        }
       } else if (responseTime > 3000) {
         status = "slow";
       }
 
       return new Response(
-        JSON.stringify({ status, responseTime, url: targetUrl }),
+        JSON.stringify({
+          status,
+          responseTime,
+          url: targetUrl,
+          httpStatusCode: response.status,
+          lastError,
+        }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
-    } catch {
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      let lastError = errMsg;
+      if (errMsg.includes("abort") || errMsg.includes("timeout")) {
+        lastError = "Connection timeout (10s)";
+      } else if (errMsg.includes("dns") || errMsg.includes("getaddrinfo")) {
+        lastError = "DNS resolution failed";
+      } else if (errMsg.includes("ssl") || errMsg.includes("certificate")) {
+        lastError = "SSL/TLS certificate error";
+      } else if (errMsg.includes("refused")) {
+        lastError = "Connection refused";
+      }
+
       return new Response(
-        JSON.stringify({ status: "offline", responseTime: null, url: targetUrl }),
+        JSON.stringify({
+          status: "offline",
+          responseTime: null,
+          url: targetUrl,
+          httpStatusCode: null,
+          lastError,
+        }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }

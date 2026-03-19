@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { LIVE_QUERY_OPTIONS } from "@/lib/live-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,6 +85,7 @@ export default function WebsitesPage() {
 
   const { data: websites, isLoading } = useQuery({
     queryKey: ["websites"],
+    ...LIVE_QUERY_OPTIONS,
     queryFn: async () => {
       const { data, error } = await supabase.from("websites").select("*").order("created_at", { ascending: false });
       if (error) throw error;
@@ -255,14 +257,17 @@ export default function WebsitesPage() {
               <th className="px-6 py-3">Website</th>
               <th className="px-6 py-3">Notify</th>
               <th className="px-6 py-3">Status</th>
+              <th className="px-6 py-3">HTTP Code</th>
               <th className="px-6 py-3">Response</th>
+              <th className="px-6 py-3">Error / Reason</th>
+              <th className="px-6 py-3">Last Checked</th>
               <th className="px-6 py-3">Tracking</th>
               <th className="px-6 py-3">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {isLoading && <tr><td colSpan={6} className="px-6 py-8 text-center text-sm text-muted-foreground">Loading...</td></tr>}
-            {websites?.length === 0 && <tr><td colSpan={6} className="px-6 py-8 text-center text-sm text-muted-foreground">No websites added</td></tr>}
+            {isLoading && <tr><td colSpan={9} className="px-6 py-8 text-center text-sm text-muted-foreground">Loading...</td></tr>}
+            {websites?.length === 0 && <tr><td colSpan={9} className="px-6 py-8 text-center text-sm text-muted-foreground">No websites added</td></tr>}
             {websites?.map((w) => (
               <tr key={w.id} className="hover:bg-muted/30 transition-colors">
                 <td className="px-6 py-4">
@@ -285,7 +290,36 @@ export default function WebsitesPage() {
                     {w.status}
                   </span>
                 </td>
+                <td className="px-6 py-4">
+                  {(w as any).http_status_code ? (
+                    <span className={cn(
+                      "inline-flex items-center rounded-md px-2 py-0.5 text-xs font-mono font-medium",
+                      (w as any).http_status_code >= 200 && (w as any).http_status_code < 300 ? "bg-[hsl(var(--success))]/10 text-[hsl(var(--success))]"
+                        : (w as any).http_status_code >= 400 ? "bg-destructive/10 text-destructive"
+                        : "bg-muted text-muted-foreground"
+                    )}>
+                      {(w as any).http_status_code}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-muted-foreground">—</span>
+                  )}
+                </td>
                 <td className="px-6 py-4 text-sm font-mono text-foreground">{w.response_time_ms ? `${w.response_time_ms}ms` : "—"}</td>
+                <td className="px-6 py-4">
+                  {(w as any).last_error ? (
+                    <span className={cn(
+                      "inline-flex items-center gap-1 text-xs max-w-[220px] truncate",
+                      (w as any).last_error?.includes("Cloudflare") ? "text-amber-500" : "text-destructive"
+                    )} title={(w as any).last_error}>
+                      {(w as any).last_error?.includes("Cloudflare") ? "🛡️" : "⚠️"} {(w as any).last_error}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-[hsl(var(--success))]">✓ No errors</span>
+                  )}
+                </td>
+                <td className="px-6 py-4 text-xs text-muted-foreground whitespace-nowrap">
+                  {w.last_checked_at ? new Date(w.last_checked_at).toLocaleString() : "Never"}
+                </td>
                 <td className="px-6 py-4">
                   <Switch checked={w.tracking_enabled} onCheckedChange={(v) => toggleTracking.mutate({ id: w.id, enabled: v })} />
                 </td>
