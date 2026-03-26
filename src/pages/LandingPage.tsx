@@ -8,7 +8,6 @@ import Footer from "@/components/Footer";
 import {
   Globe,
   Search,
-  Bell,
   BarChart3,
   Clock,
   Shield,
@@ -20,8 +19,6 @@ import {
   Monitor,
   Mail,
   Activity,
-  ChevronDown,
-  ExternalLink,
   Loader2,
 } from "lucide-react";
 import {

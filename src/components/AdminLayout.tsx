@@ -31,7 +31,6 @@ export default function AdminLayout() {
   const { logoUrl, logoAlt } = useLogo();
 
   useAdminRealtimeSync();
-
   const handleSignOut = async () => {
     await signOut();
     navigate("/login");
@@ -42,6 +41,7 @@ export default function AdminLayout() {
       {mobileOpen && (
         <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden" onClick={() => setMobileOpen(false)} />
       )}
+
 
       <aside className={cn(
         "fixed inset-y-0 left-0 z-50 flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-200 lg:static lg:translate-x-0",

@@ -126,7 +126,6 @@ export default function PricingPage() {
       window.location.href = `/login?plan=${planKey}&method=paypal`;
       return;
     }
-
     setLoadingPlan(`${planKey}-paypal`);
     try {
       const { data, error } = await supabase.functions.invoke("paypal-create-order", {
