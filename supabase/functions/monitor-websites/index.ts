@@ -163,9 +163,11 @@ async function sendAlert(smtpSettings: any, site: any, status: string, supabaseC
     ? "We detected that the following website is currently unreachable."
     : "Great news! The following website has recovered and is back online.";
 
+  const istTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "medium", timeStyle: "short" });
+
   const subject = isDown
-    ? `🔴 ALERT: ${site.name} is DOWN — Isitonlineornot`
-    : `🟢 RECOVERY: ${site.name} is back ONLINE — Isitonlineornot`;
+    ? `🔴 ALERT: ${site.name} is DOWN — ${istTime} IST — Isitonlineornot`
+    : `🟢 RECOVERY: ${site.name} is back ONLINE — ${istTime} IST — Isitonlineornot`;
 
   const logoUrl = supabaseClient ? await getLogoUrl(supabaseClient) : "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
 
