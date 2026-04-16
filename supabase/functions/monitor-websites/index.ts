@@ -166,8 +166,8 @@ async function sendAlert(smtpSettings: any, site: any, status: string, supabaseC
   const istTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "medium", timeStyle: "short" });
 
   const subject = isDown
-    ? `🔴 ALERT: ${site.name} is DOWN — ${istTime} IST — Isitonlineornot`
-    : `🟢 RECOVERY: ${site.name} is back ONLINE — ${istTime} IST — Isitonlineornot`;
+    ? `🔴 ALERT: ${site.name} is DOWN — ${istTime} IST`
+    : `🟢 RECOVERY: ${site.name} is back ONLINE — ${istTime} IST`;
 
   const logoUrl = supabaseClient ? await getLogoUrl(supabaseClient) : "https://hdeeuacrbigcetgushch.supabase.co/storage/v1/object/public/email-assets/ns-logo.png";
 
